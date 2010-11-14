@@ -1,6 +1,9 @@
 from subprocess import Popen, PIPE
 import sys
 
+from mako.template import Template
+from mako.lookup import TemplateLookup
+
 NEWLINE = '\n'
 
 class SourceFile(object):
@@ -82,9 +85,21 @@ class Diff(object):
 
 def main():
     diff = Diff('/tmp/couch.py.old', '/tmp/couch.py')
-    diff.pretty_print()
+    #diff.pretty_print()
     #print(diff.before)
     #print(diff.after)
+
+    model = {'diff':diff}
+    src = '/home/jmcfarlane/dev/OpenCodeReview' + '/view/'
+    lookup = TemplateLookup(directories=[src])
+    view = Template(filename=src + 'diff.tmpl',
+                    lookup=lookup,
+                    module_directory=None)
+
+    html = view.render_unicode(model=model).encode('utf-8', 'replace')
+    fh = open('/tmp/diff.html', 'w')
+    fh.write(html)
+    fh.close()
 
 if __name__ == '__main__':
     main()

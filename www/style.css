@@ -1,0 +1,38 @@
+#diff {
+  font-family: 'Consolas', 'Bitstream Vera Mono';
+}
+
+#diff .line .column {
+  max-width: 45%;
+}
+
+.column {
+  float: left;
+}
+
+.before, .after {
+}
+
+.change {
+  width: 8px;
+  text-align: center;
+  background-color: #dddddd;
+  margin: 0 8px
+}
+
+.added {
+  background-color: green;
+}
+
+.changed {
+  background-color: pink;
+}
+
+.removed {
+  background-color: red;
+  color: white;
+}
+
+.line {
+  clear: both;
+}

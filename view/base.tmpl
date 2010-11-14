@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>${self.title()}</title>
+    <link href="file:///home/jmcfarlane/dev/OpenCodeReview/www/style.css"
+          rel="stylesheet" type="text/css" />
+  </head>
+ 
+  <body>
+    <div id="body">
+      ${self.body()}
+    </div>
+    ${self.javascript()}
+  </body>
+</html>
+ 
+## Overloadable functions
+<%def name="title()">
+  OpenCodeReview
+</%def>
+ 
+<%def name="javascript()">
+</%def>

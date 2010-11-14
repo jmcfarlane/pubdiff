@@ -1,0 +1,38 @@
+<%inherit file="/base.tmpl"/>
+<div id="diff">
+  <pre class="column before">${code(0)}</pre>
+  <pre class="column change">${changes() | h}</pre>
+  <pre class="column after">${code(2)}</pre>
+</div>
+
+<%def name="code(position)">
+  %for columns in model['diff'].lines:
+    %if columns[1].strip() == '|':
+<span class="changed">${columns[position]}</span>
+    %elif columns[1].strip() == '>':
+      %if position == 0:
+<span>${columns[position]}</span>
+      %else:
+<span class="added">${columns[position]}</span>
+      %endif
+    %elif columns[1].strip() == '<':
+      %if position == 0:
+<span class="removed">${columns[position]}</span>
+      %else:
+<span>${columns[position]}</span>
+      %endif
+    %else:
+${columns[position]}
+    %endif
+  %endfor
+</%def>
+
+
+<%def name="changes()">
+
+  %for before, change, after in model['diff'].lines:
+${change}
+  %endfor
+</%def>
+
+##${'\n'.join([c[1] for c in model['diff'].lines])}
