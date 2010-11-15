@@ -16,4 +16,7 @@ app.mapper = (
     # Home controller
     (r'^$', 'home.index'),
     (r'^/r/[a-z0-9]+$', 'home.review'),
+
+    # API controllers
+    (r'^/api/upload/?$', 'home.upload'),
 )
