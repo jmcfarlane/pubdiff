@@ -1,38 +1,20 @@
-#diff {
-  font-family: 'Consolas', 'Bitstream Vera Mono';
-}
-
 #diff .line .column {
   max-width: 45%;
 }
 
-.column {
+#diff DIV {
   float: left;
-}
-
-.before, .after {
 }
 
 .change {
   width: 8px;
   text-align: center;
   background-color: #dddddd;
-  margin: 0 8px
+  margin: 0 8px !important;
+  font-size: 12px;
+  line-height: 1.1em !important;
 }
 
-.added {
-  background-color: green;
-}
-
-.changed {
-  background-color: pink;
-}
-
-.removed {
-  background-color: red;
-  color: white;
-}
-
-.line {
-  clear: both;
+.syntaxhighlighter * .code, .syntaxhighlighter * .gutter {
+  font-size: 12px !important;
 }
