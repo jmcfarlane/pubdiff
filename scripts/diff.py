@@ -84,7 +84,8 @@ class Diff(object):
         return self._analyze(stdout)
 
 def main():
-    diff = Diff('/tmp/couch.py.old', '/tmp/couch.py')
+    #diff = Diff('/tmp/couch.py.old', '/tmp/couch.py')
+    diff = Diff('/tmp/env.py.old', '/tmp/env.py')
     #diff.pretty_print()
     #print(diff.before)
     #print(diff.after)

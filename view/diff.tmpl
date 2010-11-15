@@ -17,3 +17,40 @@ ${columns[position]}
 ${change}
   %endfor
 </%def>
+
+<%def name="javascript()">
+  ${parent.javascript()}
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      %for i, columns in enumerate(model['diff'].lines):
+        <% 
+          change = columns[1].strip()
+          position = i + 1
+        %>
+
+        %if change == '>':
+          added(${position});
+        %elif change == '|':
+          modified(${position});
+        %elif change == '<':
+          removed(${position});
+        %endif
+      %endfor
+
+      //added(5);
+      //added(7);
+      //added(10);
+
+      //modified(57);
+      //modified(58);
+
+      //removed(32);
+      //removed(33);
+      //removed(34);
+      //removed(35);
+
+    });
+  </script>
+</%def>
+
