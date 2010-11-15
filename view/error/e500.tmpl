@@ -1,0 +1,21 @@
+<%inherit file="/base.tmpl"/>
+
+% if not model.exception is None:
+  <h2>Application Error</h2>
+
+  <h4>Summary</h4>
+  ${model.exception.summary | h}
+
+  <h4>Message</h4>
+  ${model.exception.message | h}
+
+  <h4>Traceback</h4>
+  <ol>
+    % for part in model.exception.traceback:
+       <li>${part | h}</li>
+    % endfor
+  </ol>
+% else:
+  <h2>Application Error</h2>
+  Turn on debugging to see the exception here.  
+% endif
