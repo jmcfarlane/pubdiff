@@ -84,13 +84,13 @@ class Diff(object):
         return self._analyze(stdout)
 
 def main():
-    #diff = Diff('/tmp/couch.py.old', '/tmp/couch.py')
-    diff = Diff('/tmp/env.py.old', '/tmp/env.py')
-    #diff.pretty_print()
-    #print(diff.before)
-    #print(diff.after)
+    diff1 = Diff('/tmp/couch.py.old', '/tmp/couch.py')
+    diff2 = Diff('/tmp/env.py.old', '/tmp/env.py')
+    #diff1.pretty_print()
+    #print(diff1.before)
+    #print(diff1.after)
 
-    model = {'diff':diff}
+    model = {'diffs':[diff1, diff2]}
     src = '/home/jmcfarlane/dev/OpenCodeReview' + '/view/'
     lookup = TemplateLookup(directories=[src])
     view = Template(filename=src + 'diff.tmpl',
