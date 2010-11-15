@@ -9,7 +9,7 @@ from chula.nosql import couch
 sys.path.insert(0, os.getcwd())
 
 # OpenCodeReview immports
-from ocr import diff
+from pubdiff import diff
 
 class Diff(dict):
     def __init__(self):
@@ -18,7 +18,7 @@ class Diff(dict):
         self['after'] = {'name':None}
 
 class Review(couch.Document):
-    DB = 'ocr/reviews'
+    DB = 'pubdiff/reviews'
 
     def __init__(self, id=None, **kwargs):
         self['diffs'] = []

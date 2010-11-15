@@ -7,8 +7,8 @@ import shutil
 from chula import webservice
 
 # Ocr imports
-from ocr import review
-from ocr.www.controllers import base
+from pubdiff import review
+from pubdiff.www.controllers import base
 
 class Home(base.Controller):
     def index(self):
@@ -25,7 +25,7 @@ class Home(base.Controller):
         was_uploaded = False
 
         if self.env.form_raw:
-            TEMP_DIR = '/tmp/ocr_upload'
+            TEMP_DIR = '/tmp/pubdiff_upload'
             paths_to_upload = []
             try:
                 diffs = json.loads(self.env.form_raw)
