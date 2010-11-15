@@ -1,5 +1,4 @@
 from subprocess import Popen, PIPE
-import sys
 
 NEWLINE = '\n'
 

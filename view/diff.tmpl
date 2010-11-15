@@ -6,8 +6,8 @@
 
 <%def name="render_diff(diff_idx, diff)">
   <h1>
-    ${diff._before.name}:
-    ${diff._after.name}
+    ${diff['before']['name']}:
+    ${diff['after']['name']}
   </h1>
   <div id="diff" class="diff${diff_idx}">
     <div class="before"><pre class="brush:python">${code(diff, 0)}</pre></div>
@@ -17,14 +17,14 @@
 </%def>
 
 <%def name="code(diff, position)">
-  %for columns in diff.lines:
+  %for columns in diff['lines']:
 ${columns[position]}
   %endfor
 </%def>
 
 <%def name="changes(diff)">
 
-  %for before, change, after in diff.lines:
+  %for before, change, after in diff['lines']:
 ${change}
   %endfor
 </%def>
@@ -35,7 +35,7 @@ ${change}
   <script type="text/javascript">
     $(document).ready(function () {
       %for diff_idx, diff in enumerate(model['diffs']):
-        %for line_idx, columns in enumerate(diff.lines):
+        %for line_idx, columns in enumerate(diff['lines']):
           <% 
             change = columns[1].strip()
             position = line_idx + 1
