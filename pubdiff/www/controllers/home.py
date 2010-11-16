@@ -1,9 +1,3 @@
-#Python imports
-import json
-import os
-import shutil
-import uuid
-
 # Third party imports
 from chula import webservice
 
@@ -16,45 +10,18 @@ class Home(base.Controller):
         return self.render('/home.tmpl')
 
     def review(self):
-        r = review.Review('test')
+        review_id = review.RE_REVIEW.match(self.env['PATH_INFO']).group(1)
+        document = review.Review(review_id)
 
-        self.model = r
-        return self.render('/diff.tmpl')
+        if document['diffs']:
+            self.model = document
+            return self.render('/diff.tmpl')
+
+        return self.render('/diff_not_found.tmpl')
 
     @webservice.expose()
     def upload(self):
-        was_uploaded = False
+        uploaded = review.UploadedReview(self.env.form_raw)
+        url = '%s/r/%s' % (self.env['ajax_uri'], uploaded.review_id)
 
-        if self.env.form_raw:
-            TEMP_DIR = os.path.join('/tmp/pubdiff_upload', uuid.uuid4().hex)
-            paths_to_upload = []
-            try:
-                diffs = json.loads(self.env.form_raw)
-                os.makedirs(TEMP_DIR)
-                for diff in diffs:
-                    # Reconstitute the source files on disk
-                    paths = []
-                    for state in ['before', 'after']:
-                        source = diff[state]
-                        name = os.path.basename(source['name'])
-                        fq_path = os.path.join(TEMP_DIR, name)
-                        paths.append(fq_path)
-                        with open(fq_path, 'w') as fh:
-                            fh.write(source['contents'])
-
-                    # Append the (now on disk) paths to be uploaded
-                    paths_to_upload.append(paths)
-
-                # Perform actual upload to the db of all diffs
-                review.upload(paths_to_upload)
-                was_uploaded = True
-            except Exception, ex:
-                return repr(ex)
-            finally:
-                shutil.rmtree(TEMP_DIR)    
-                
-
-        if was_uploaded:
-            return 'Diff(s) uploaded successfully'
-        else:
-            return 'Nothing uploaded'
+        return url

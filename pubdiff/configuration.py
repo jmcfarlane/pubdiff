@@ -1,6 +1,11 @@
+# Python imports
 import os
 
+# Third party imports
 from chula import config
+
+# Pubdiff imports
+from pubdiff import review
 
 # Development configuration
 app = config.Config()
@@ -15,7 +20,7 @@ app.local.root = os.getcwd()
 app.mapper = (
     # Home controller
     (r'^$', 'home.index'),
-    (r'^/r/[a-z0-9]+$', 'home.review'),
+    (review.RE_REVIEW.pattern, 'home.review'),
 
     # API controllers
     (r'^/api/upload/?$', 'home.upload'),

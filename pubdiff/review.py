@@ -1,6 +1,7 @@
 # Python imports
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -13,6 +14,8 @@ sys.path.insert(0, os.getcwd())
 
 # OpenCodeReview immports
 from pubdiff import diff
+
+RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
 
 class Diff(dict):
     def __init__(self):
@@ -31,17 +34,19 @@ class Review(couch.Document):
 
         super(Review, self).__init__(id, **kwargs)
 
-class EncodedReview(list):
+class UploadedReview(list):
     def __init__(self, json_string):
+        self.review_id = None
+
         if json_string:
             self.fill(json_string)
 
     def fill(self, json_string):
-        was_uploaded = False
-        TEMP_DIR = os.path.join('/tmp/pubdiff_upload', uuid.uuid4().hex)
-        paths_to_upload = []
+        review_id = uuid.uuid4().hex
+        TEMP_DIR = os.path.join('/tmp/pubdiff_upload', review_id)
+
         try:
-            diffs = json.loads(self.env.form_raw)
+            diffs = json.loads(json_string)
             os.makedirs(TEMP_DIR)
             for diff in diffs:
                 # Reconstitute the source files on disk
@@ -55,35 +60,30 @@ class EncodedReview(list):
                         fh.write(source['contents'])
 
                 # Append the (now on disk) paths to be uploaded
-                paths_to_upload.append(paths)
+                self.append(paths)
 
-            # Perform actual upload to the db of all diffs
-            review.upload(paths_to_upload)
-            was_uploaded = True
+            # Upload/persist to the db
+            self.persist(review_id)
+
         except Exception, ex:
-            return repr(ex)
+            raise
         finally:
             shutil.rmtree(TEMP_DIR)    
-            
 
-    if was_uploaded:
-        return 'Diff(s) uploaded successfully'
-    else:
-        return 'Nothing uploaded'
+    def persist(self, review_id):
+        # Instantiate and clean a review model object
+        review = Review(review_id)
+        review['diffs'] = []
 
-def upload(diffs):
-    # Instantiate and clean a review model object
-    review = Review('test')
-    review['diffs'] = []
+        # Add this review's diffs
+        for pair in self:
+            parsed = diff.Diff(pair[0], pair[1])
+            d = Diff()
+            d['lines'] = parsed.lines
+            d['before']['name'] = parsed._before.name
+            d['after']['name'] = parsed._after.name
 
-    # Add this review's diffs
-    for pair in diffs:
-        parsed = diff.Diff(pair[0], pair[1])
-        d = Diff()
-        d['lines'] = parsed.lines
-        d['before']['name'] = parsed._before.name
-        d['after']['name'] = parsed._after.name
+            review['diffs'].append(d)
 
-        review['diffs'].append(d)
-
-    review.persist()
+        if review.persist():
+            self.review_id = review_id
