@@ -2,6 +2,7 @@
 import json
 import os
 import shutil
+import uuid
 
 # Third party imports
 from chula import webservice
@@ -25,7 +26,7 @@ class Home(base.Controller):
         was_uploaded = False
 
         if self.env.form_raw:
-            TEMP_DIR = '/tmp/pubdiff_upload'
+            TEMP_DIR = os.path.join('/tmp/pubdiff_upload', uuid.uuid4().hex)
             paths_to_upload = []
             try:
                 diffs = json.loads(self.env.form_raw)

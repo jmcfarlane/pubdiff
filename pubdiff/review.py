@@ -1,7 +1,10 @@
 # Python imports
+import json
 import os
+import shutil
 import sys
 import time
+import uuid
 
 # Third party imports
 from chula.nosql import couch
@@ -28,6 +31,46 @@ class Review(couch.Document):
 
         super(Review, self).__init__(id, **kwargs)
 
+class EncodedReview(list):
+    def __init__(self, json_string):
+        if json_string:
+            self.fill(json_string)
+
+    def fill(self, json_string):
+        was_uploaded = False
+        TEMP_DIR = os.path.join('/tmp/pubdiff_upload', uuid.uuid4().hex)
+        paths_to_upload = []
+        try:
+            diffs = json.loads(self.env.form_raw)
+            os.makedirs(TEMP_DIR)
+            for diff in diffs:
+                # Reconstitute the source files on disk
+                paths = []
+                for state in ['before', 'after']:
+                    source = diff[state]
+                    name = os.path.basename(source['name'])
+                    fq_path = os.path.join(TEMP_DIR, name)
+                    paths.append(fq_path)
+                    with open(fq_path, 'w') as fh:
+                        fh.write(source['contents'])
+
+                # Append the (now on disk) paths to be uploaded
+                paths_to_upload.append(paths)
+
+            # Perform actual upload to the db of all diffs
+            review.upload(paths_to_upload)
+            was_uploaded = True
+        except Exception, ex:
+            return repr(ex)
+        finally:
+            shutil.rmtree(TEMP_DIR)    
+            
+
+    if was_uploaded:
+        return 'Diff(s) uploaded successfully'
+    else:
+        return 'Nothing uploaded'
+
 def upload(diffs):
     # Instantiate and clean a review model object
     review = Review('test')
@@ -44,13 +87,3 @@ def upload(diffs):
         review['diffs'].append(d)
 
     review.persist()
-    
-def main():
-    diffs = []
-    diffs.append(('/tmp/couch.py.old', '/tmp/couch.py'))
-    diffs.append(('/tmp/env.py.old', '/tmp/env.py'))
-    
-    upload(diffs)
-
-if __name__ == '__main__':
-    main()
