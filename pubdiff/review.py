@@ -1,11 +1,11 @@
 # Python imports
+import hashlib
 import json
 import os
 import re
 import shutil
 import sys
 import time
-import uuid
 
 # Third party imports
 from chula.nosql import couch
@@ -42,7 +42,7 @@ class UploadedReview(list):
             self.fill(json_string)
 
     def fill(self, json_string):
-        review_id = uuid.uuid4().hex
+        review_id = hashlib.sha1(json_string).hexdigest()
         TEMP_DIR = os.path.join('/tmp/pubdiff_upload', review_id)
 
         try:
