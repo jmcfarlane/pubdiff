@@ -1,7 +1,7 @@
 # Third party imports
 from chula import webservice
 
-# Ocr imports
+# Pubdiff imports
 from pubdiff import review
 from pubdiff.www.controllers import base
 
