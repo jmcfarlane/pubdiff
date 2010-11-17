@@ -1,34 +1,97 @@
 # Python imports
+from subprocess import Popen, PIPE
 import json
 import os
+import re
 import sys
 import urllib2
+import webbrowser
 
+AFTER = 'after'
+BEFORE = 'before'
+CONTENTS = 'contents'
+NAME = 'name'
 URL = 'http://localhost:8080/api/upload'
 
-def consume_source(path):
-    source = {}
-    with open(path) as fh:
-        source['contents'] = fh.read()
-        source['name'] = fh.name
+class SourceFile(dict):
+    def __init__(self, name=None, contents=None):
+        self[NAME] = name
+        self[CONTENTS] = contents
 
-    return source
+class Diff(dict):
+    def __init__(self, before, after):
+        self[BEFORE] = before
+        self[AFTER] = after
 
-def package_source(before, after):
-    package = {}
-    package['before'] = consume_source(before)
-    package['after'] = consume_source(after)
+class DiffParser(object):
+    def __init__(self, stdin):
+        self.cwd = os.getcwd()
+        self.diff = stdin.split('\n')
 
-    return package
+    def diffs(self):
+        raise NotImplementedError('fetch_diffs() must be implementd')
+
+    def shell(self, cmd):
+        output = Popen(cmd, cwd=self.cwd, shell=True, stdout=PIPE, stderr=PIPE)
+        return output.communicate()
+
+class GitParser(DiffParser):
+    RE_FILE_NAMES = re.compile(r'a/(?P<before>.*) b/(?P<after>.*)')
+    RE_PATTERN = re.compile(r'^diff --git')
+    RE_BLOBS = re.compile(r'index '
+                           '(?P<before>[a-z0-9]{7,})\.\.'
+                           '(?P<after>[a-z0-9]{7,}) '
+                           '(?P<perms>[0-9]{6})')
+
+    def source(self, name, blob):
+        cmd = 'git show %s' % blob
+        stdout, stderr = self.shell(cmd)
+        return SourceFile(name, stdout)
+
+    def fetch_source_files(self, names, blobs):
+        before = self.source(names.group('before'), blobs.group('before'))
+        after = self.source(names.group('after'), blobs.group('after'))
+        return Diff(before, after)
+
+    def fetch_diffs(self):
+        diffs = []
+
+        for i, line in enumerate(self.diff):
+            blobs = GitParser.RE_BLOBS.match(line)
+            if blobs:
+                names = GitParser.RE_FILE_NAMES.search(self.diff[i - 1])
+                diffs.append(self.fetch_source_files(names, blobs))
+
+        return diffs
+
+class Client(object):
+    def __init__(self):
+        self.stdin = sys.stdin.read()
+        self.parser = self.fetch_parser(self.stdin)
+
+    def fetch_parser(self, diff):
+        for cls in [GitParser]:
+            if cls.RE_PATTERN.match(diff):
+                return cls(self.stdin)
+
+        msg = 'Your diff appears to be unsupported'
+        raise UnsupportedClientError(msg)
+
+    def main(self):
+        diffs = self.parser.fetch_diffs()
+        if diffs:
+            request = urllib2.Request(URL, json.dumps(diffs))
+            response = urllib2.urlopen(request)
+            payload = json.loads(response.read())
+            url = payload['data']['url']
+            webbrowser.open(url)
+
+class UnsupportedClientError(Exception):
+    pass
 
 def main():
-    diffs = []
-    diffs.append(package_source('/tmp/couch.py.old', '/tmp/couch.py'))
-    diffs.append(package_source('/tmp/env.py.old', '/tmp/env.py'))
-
-    request = urllib2.Request(URL, json.dumps(diffs))
-    response = urllib2.urlopen(request)
-    print response.read()
+    client = Client()
+    client.main()
 
 if __name__ == '__main__':
     main()

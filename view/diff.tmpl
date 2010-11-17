@@ -1,24 +1,35 @@
 <%inherit file="/base.tmpl"/>
 
 %for diff_idx, diff in enumerate(model['diffs']):
-  ${render_diff(diff_idx, diff)}
+  <div class="div-container">
+    ${render_diff(diff_idx, diff)}
+  </div>
 %endfor
 
 <%def name="render_diff(diff_idx, diff)">
-  <h1>
-    ${diff['before']['name']}:
-    ${diff['after']['name']}
-  </h1>
   <div id="diff" class="diff${diff_idx}">
-    <div class="before"><pre class="brush:python">${code(diff, 0)}</pre></div>
-    <div><pre class="column change">${changes(diff) | h}</pre></div>
-    <div class="after"><pre class="brush:python">${code(diff, 2)}</pre></div>
+    <div class="before">
+      <h1>
+        ${diff['before']['name']}
+      </h1>
+      <pre class="brush:python">${code(diff, 0)}</pre>
+    </div>
+    <div>
+      <h1>&nbsp;</h1>
+      <pre class="column change">${changes(diff) | h}</pre>
+    </div>
+    <div class="after">
+      <h1>
+        ${diff['after']['name']}
+      </h1>
+      <pre class="brush:python">${code(diff, 2)}</pre>
+    </div>
   </div>
 </%def>
 
 <%def name="code(diff, position)">
   %for columns in diff['lines']:
-${columns[position]}
+${columns[position] | h}
   %endfor
 </%def>
 

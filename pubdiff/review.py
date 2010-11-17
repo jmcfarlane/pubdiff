@@ -41,20 +41,28 @@ class UploadedReview(list):
         if json_string:
             self.fill(json_string)
 
+    def path2hash(self, path):
+        return path.replace(os.path.sep, '^')
+
+    def hash2path(self, name):
+        canonical = name.replace('^', os.path.sep)
+        return canonical.split(self.temp_dir).pop()
+
     def fill(self, json_string):
         review_id = hashlib.sha1(json_string).hexdigest()
-        TEMP_DIR = os.path.join('/tmp/pubdiff_upload', review_id)
+        self.temp_dir = os.path.join('/tmp/pubdiff_upload', review_id)
 
         try:
             diffs = json.loads(json_string)
-            os.makedirs(TEMP_DIR)
+            os.makedirs(self.temp_dir)
             for diff in diffs:
                 # Reconstitute the source files on disk
                 paths = []
                 for state in ['before', 'after']:
                     source = diff[state]
-                    name = os.path.basename(source['name'])
-                    fq_path = os.path.join(TEMP_DIR, name)
+                    name = self.path2hash(source['name']) + ':' + state
+                    fq_path = os.path.join(self.temp_dir, name)
+
                     paths.append(fq_path)
                     with open(fq_path, 'w') as fh:
                         fh.write(source['contents'])
@@ -68,7 +76,7 @@ class UploadedReview(list):
         except Exception, ex:
             raise
         finally:
-            shutil.rmtree(TEMP_DIR)    
+            shutil.rmtree(self.temp_dir)
 
     def persist(self, review_id):
         # Instantiate and clean a review model object
@@ -80,8 +88,8 @@ class UploadedReview(list):
             parsed = diff.Diff(pair[0], pair[1])
             d = Diff()
             d['lines'] = parsed.lines
-            d['before']['name'] = parsed._before.name
-            d['after']['name'] = parsed._after.name
+            d['before']['name'] = self.hash2path(parsed._before.name)
+            d['after']['name'] = self.hash2path(parsed._after.name)
 
             review['diffs'].append(d)
 

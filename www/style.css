@@ -1,5 +1,13 @@
+H1 {
+  font-size: 1em;
+}
+
 #diff .line .column {
   max-width: 45%;
+}
+
+.div-container {
+  clear: both;
 }
 
 #diff DIV {

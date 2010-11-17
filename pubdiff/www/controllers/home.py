@@ -24,4 +24,4 @@ class Home(base.Controller):
         uploaded = review.UploadedReview(self.env.form_raw)
         url = '%s/r/%s' % (self.env['ajax_uri'], uploaded.review_id)
 
-        return url
+        return {'url':url}
