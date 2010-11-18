@@ -22,7 +22,7 @@ class Diff(object):
     def __init__(self, before, after):
         self._before = SourceFile(before)
         self._after = SourceFile(after)
-        self.mid_point = self._before.cols
+        self.width = self._before.cols + self._after.cols
         self.lines = self.process()
 
     def __str__(self):
@@ -53,7 +53,7 @@ class Diff(object):
         return mapping[delta]
 
     def parse(self, line):
-        zb_mid_point = self.mid_point - 1
+        zb_mid_point = (self.width / 2) - 1
         zb_mid_width = 3
         if line:
             before =  line[:zb_mid_point]
@@ -69,9 +69,8 @@ class Diff(object):
         print(self)
 
     def process(self):
-        width = self._before.cols + self._after.cols
         cmd = 'diff --expand-tabs --width %s --side-by-side %s %s'
-        cmd = cmd % (width, self._before.name, self._after.name)
+        cmd = cmd % (self.width, self._before.name, self._after.name)
 
         # Execute the command and capture output
         output = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
