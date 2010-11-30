@@ -1,5 +1,6 @@
 # Python imports
 from subprocess import Popen, PIPE
+import ConfigParser
 import json
 import os
 import re
@@ -7,11 +8,14 @@ import sys
 import urllib2
 import webbrowser
 
+config = ConfigParser.ConfigParser({'url':'http://localhost:8080'})
+config.read(os.path.expanduser('~/.pubdiffrc'))
+
 AFTER = 'after'
 BEFORE = 'before'
 CONTENTS = 'contents'
 NAME = 'name'
-URL = 'http://localhost:8080/api/upload'
+URL = config.get('core', 'url') + '/api/upload'
 
 class SourceFile(dict):
     def __init__(self, name=None, contents=None):

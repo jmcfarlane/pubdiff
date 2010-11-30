@@ -1,0 +1,71 @@
+#! /bin/bash -u
+
+SRC=$(dirname $(readlink -f $0))
+ACTION=${1:-'start'}
+CONFIG=/var/www/pubdiff/conf/nginx.conf
+parent_dir=/tmp/pubdiff
+
+function start_sockets {
+  sockets=$1
+  config=$2
+
+  for socket in $sockets; do
+    socket_pid="$socket.pid"
+    num=$(echo $socket | grep -E -o '[0-9]+')
+
+    # Expose env variables for the socket to pick up
+    export PUBDIFF_FCGI_SOCKET=$socket
+    export PUBDIFF_CONFIG=$config
+
+    # Make sure the directory structure exists
+    mkdir -p $(dirname $socket)
+
+    # Stop the proxy if it exists
+    if [ -f "$socket_pid" ]; then
+        pid=$(cat $socket_pid)
+        kill $pid
+        rm $socket_pid
+        rm $socket
+        
+        if [ $ACTION == "stop" ]; then
+          echo "Old FastCGI proxy ($config:$num) found (pid:$pid): stopping..."
+        fi
+    fi
+
+    # Start the proxy(s)
+    if [ "$ACTION" == 'start' ]; then
+        # Change directories to the root of the repository
+        cd $SRC/..
+
+        # Launch the fastcgi proxy
+        python bin/fastcgi.py &
+        pid=$!
+        echo "Fasgcgi proxy ($config:$num) started with pid: $pid"
+        echo $pid > $socket_pid
+
+        # Give the socket time to be created
+        while true; do
+          if [ -S $socket ]; then
+            break
+          fi
+          sleep .1
+        done
+
+        # Set permissions so (for now) anyone can write to it
+        if [ -S $socket ]; then
+            chmod o+w $socket
+        else
+            echo "Proxy socket not found"
+        fi
+    fi
+  done
+}
+
+# Make the required directory structure
+mkdir -p $parent_dir/fcgi
+chmod o+x $parent_dir
+chmod o+x $parent_dir/fcgi
+
+# www.pubdiff.com
+sockets=$(cat $CONFIG | grep -v '#' | grep -E -o '/.*/www.socket.[0-9]+')
+start_sockets "$sockets" "prod"
