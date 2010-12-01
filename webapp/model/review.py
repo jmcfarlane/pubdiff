@@ -13,7 +13,7 @@ from chula.nosql import couch
 sys.path.insert(0, os.getcwd())
 
 # Pubdiff immports
-from pubdiff import diff
+from model import diff
 
 RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
 

@@ -8,11 +8,11 @@ cwd = os.getcwd()
 sys.path.insert(0, cwd)
 
 from chula.www.adapters.wsgi import adapter
-from pubdiff.configuration import app as config
+from model.configuration import app
 
 @adapter.wsgi
 def application():
-    return config
+    return app
 
 # Setup a simple server using the proxy app and it's configuration
 port = 8080

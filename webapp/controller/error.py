@@ -5,7 +5,7 @@ import re
 from chula import collection
 from chula.www import http
 
-from pubdiff.www.controllers import base
+from controller import base
 
 RE_STATIC_FILE = re.compile(r'.*\.(css|gif|jpg|js|png|txt|xsl|ico|json)$')
 

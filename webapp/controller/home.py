@@ -2,8 +2,8 @@
 from chula import webservice
 
 # Pubdiff imports
-from pubdiff import review
-from pubdiff.www.controllers import base
+from model import review
+from controller import base
 
 class Home(base.Controller):
     def index(self):

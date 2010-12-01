@@ -4,6 +4,7 @@ Pubdiff fastcgi server
 
 # Python imports
 import os
+import sys
 
 # Third party imports
 from chula.www.adapters.fcgi import adapter
@@ -14,8 +15,11 @@ except ImportError:
     print "Unable to import flup.server.fcgi import WSGIServer"
     print " >>> Falling back on old version available in Chula"
 
+cwd = os.getcwd()
+sys.path.insert(0, os.path.join(cwd, 'webapp'))
+
 # Pubdiff imports
-from pubdiff import configuration
+from model import configuration
 
 @adapter.fcgi
 def application():

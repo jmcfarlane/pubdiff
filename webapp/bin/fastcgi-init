@@ -2,7 +2,7 @@
 
 SRC=$(dirname $(readlink -f $0))
 ACTION=${1:-'start'}
-CONFIG=/var/www/pubdiff/conf/nginx.conf
+CONFIG=/var/www/pubdiff/webapp/conf/nginx.conf
 parent_dir=/tmp/pubdiff
 
 function start_sockets {
@@ -38,7 +38,7 @@ function start_sockets {
         cd $SRC/..
 
         # Launch the fastcgi proxy
-        python bin/fastcgi.py &
+        python webapp/model/fastcgi.py &
         pid=$!
         echo "Fasgcgi proxy ($config:$num) started with pid: $pid"
         echo $pid > $socket_pid

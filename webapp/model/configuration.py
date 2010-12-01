@@ -5,17 +5,17 @@ import os
 from chula import config
 
 # Pubdiff imports
-from pubdiff import review
+from model import review
 
 # App configuration
 app = config.Config()
-app.classpath = 'pubdiff.www.controllers'
+app.classpath = 'controller'
 app.construction_controller = 'error'
 app.construction_trigger = '/tmp/pubdiff/site.stop'
 app.debug = False
 app.error_controller = 'error'
 app.session = False
-app.local.root = os.getcwd()
+app.local.root = os.path.join(os.getcwd(), 'webapp')
 
 # App url routes
 app.mapper = (
