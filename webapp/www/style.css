@@ -2,16 +2,22 @@ H1 {
   font-size: 1em;
 }
 
-#diff .line .column {
-  max-width: 45%;
-}
-
 .div-container {
   clear: both;
 }
 
 #diff DIV {
   float: left;
+}
+
+#diff .before, #diff .after {
+  max-width: 48%;
+  min-width: 48%;
+  overflow: auto;
+}
+
+#diff .before H1, #diff .after H1 {
+  margin-left: 32px;
 }
 
 .change {
