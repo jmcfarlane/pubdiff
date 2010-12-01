@@ -16,6 +16,30 @@ sys.path.insert(0, os.getcwd())
 from model import diff
 
 RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
+RE_BASENAME = re.compile(r':(before|after)')
+BRUSH_MAP = {
+             'bash':'sh',
+             'c':'cpp',
+             'c#':'csharp',
+             'cpp':'cpp',
+             'css':'css',
+             'dash':'sh',
+             'diff':'diff',
+             'groovy':'groovy',
+             'java':'java',
+             'js':'javascript',
+             'patch':'diff',
+             'php':'php',
+             'pl':'perl',
+             'pm':'perl',
+             'py':'python',
+             'rb':'ruby',
+             'sh':'sh',
+             'sql':'sql',
+             'vb':'vb',
+             'xml':'xml',
+             'zsh':'sh',
+            }
 
 class Diff(dict):
     def __init__(self):
@@ -78,6 +102,16 @@ class UploadedReview(list):
         finally:
             shutil.rmtree(self.temp_dir)
 
+    def brush(self, path):
+        actual_filename = os.path.basename(RE_BASENAME.sub('', path))
+        extension = ''
+        parts = actual_filename.rsplit('.', 1)
+
+        if parts:
+            extension = parts.pop()
+
+        return BRUSH_MAP.get(extension.lower(), 'plain')
+
     def persist(self, review_id):
         # Instantiate and clean a review model object
         review = Review(review_id)
@@ -88,8 +122,10 @@ class UploadedReview(list):
             parsed = diff.Diff(pair[0], pair[1])
             d = Diff()
             d['lines'] = parsed.lines
-            d['before']['name'] = self.hash2path(parsed._before.name)
             d['after']['name'] = self.hash2path(parsed._after.name)
+            d['after']['brush'] = self.brush(d['after']['name'])
+            d['before']['name'] = self.hash2path(parsed._before.name)
+            d['before']['brush'] = self.brush(d['before']['name'])
 
             review['diffs'].append(d)
 
