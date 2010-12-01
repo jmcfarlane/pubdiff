@@ -35,7 +35,7 @@ function start_sockets {
     # Start the proxy(s)
     if [ "$ACTION" == 'start' ]; then
         # Change directories to the root of the repository
-        cd $SRC/..
+        cd $SRC/../..
 
         # Launch the fastcgi proxy
         python webapp/model/fastcgi.py &

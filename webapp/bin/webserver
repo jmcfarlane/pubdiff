@@ -5,7 +5,7 @@ import sys
 from wsgiref.simple_server import make_server
 
 cwd = os.getcwd()
-sys.path.insert(0, cwd)
+sys.path.insert(0, os.path.join(cwd, 'webapp'))
 
 from chula.www.adapters.wsgi import adapter
 from model.configuration import app

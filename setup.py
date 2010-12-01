@@ -11,7 +11,7 @@ setup(
     author_email = EMAIL,
     entry_points = """
         [console_scripts]
-        pubdiff = pubdiff.client:main
+        pubdiff = client:main
     """,
     name = NAME,
     packages = find_packages(),
