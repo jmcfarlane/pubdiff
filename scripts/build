@@ -1,0 +1,16 @@
+#! /bin/bash
+
+SRC=$(dirname $(which $0))
+
+DEST=/tmp/foo
+SUPPORT_PYTHON25=false
+SUPPORT_PYTHON25_WIN32=false
+SUPPORT_PYTHON26=true
+SUPPORT_PYTHON26_WIN32=false
+SUPPORT_PYTHON31=false
+SUPPORT_PYTHON31_WIN32=false
+
+# Python-2.6
+if [ "$SUPPORT_PYTHON26" == true ]; then
+    python2.6 setup.py -q sdist bdist_egg
+fi

@@ -6,6 +6,8 @@ EMAIL = 'john.mcfarlane@rockfloat.com'
 NAME = 'Pubdiff'
 URL = 'http://www.pubdiff.com'
 
+import client
+
 setup(
     author = AUTHOR,
     author_email = EMAIL,
@@ -16,4 +18,6 @@ setup(
     name = NAME,
     packages = find_packages(),
     url = URL,
+    version = client.VERSION,
+    zip_safe = True,
 )
