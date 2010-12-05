@@ -6,14 +6,14 @@ EMAIL = 'john.mcfarlane@rockfloat.com'
 NAME = 'Pubdiff'
 URL = 'http://www.pubdiff.com'
 
-import client
+from pubdiff import client
 
 setup(
     author = AUTHOR,
     author_email = EMAIL,
     entry_points = """
         [console_scripts]
-        pubdiff = client:main
+        pubdiff = pubdiff.client:main
     """,
     name = NAME,
     packages = find_packages(),

@@ -4,3 +4,7 @@
 *.pyo
 *.swo
 *.swp
+
+build
+dist
+webapp/www/downloads

@@ -12,5 +12,10 @@ SUPPORT_PYTHON31_WIN32=false
 
 # Python-2.6
 if [ "$SUPPORT_PYTHON26" == true ]; then
-    python2.6 setup.py -q sdist bdist_egg
+    python2.6 setup.py -q bdist_egg
 fi
+
+echo "Generated:"
+for file in $(ls dist); do
+    echo " >> $file"
+done
