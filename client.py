@@ -2,6 +2,7 @@
 from subprocess import Popen, PIPE
 import ConfigParser
 import json
+import optparse
 import os
 import re
 import sys
@@ -82,13 +83,27 @@ class Client(object):
         raise UnsupportedClientError(msg)
 
     def main(self):
+        # Parse command line options
+        (options, args) = self.getopts()
+
         diffs = self.parser.fetch_diffs()
         if diffs:
             request = urllib2.Request(URL, json.dumps(diffs))
             response = urllib2.urlopen(request)
             payload = json.loads(response.read())
             url = payload['data']['url']
-            webbrowser.open(url)
+
+            if options.browser:
+                webbrowser.open(url)
+
+            print url
+
+    def getopts(self):
+        p = optparse.OptionParser('Usage: %prog [options]')
+        p.add_option('-b', '--browser', dest='browser', action='store_true')
+        p.set_defaults(browser=False)
+
+        return p.parse_args()
 
 class UnsupportedClientError(Exception):
     pass
