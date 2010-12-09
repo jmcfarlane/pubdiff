@@ -120,6 +120,9 @@ class UploadedReview(list):
         # Add this review's diffs
         for pair in self:
             parsed = diff.Diff(pair[0], pair[1])
+            if os.environ.get('debug'):
+                parsed.pretty_print()
+
             d = Diff()
             d['lines'] = parsed.lines
             d['after']['name'] = self.hash2path(parsed._after.name)

@@ -45,13 +45,29 @@ class GitParser(DiffParser):
     RE_FILE_NAMES = re.compile(r'a/(?P<before>.*) b/(?P<after>.*)')
     RE_PATTERN = re.compile(r'^diff --git')
     RE_BLOBS = re.compile(r'index '
-                           '(?P<before>[a-z0-9]{7,})\.\.'
-                           '(?P<after>[a-z0-9]{7,}) '
-                           '(?P<perms>[0-9]{6})')
+                          r'(?P<before>[a-z0-9]{7,})\.\.'
+                          r'(?P<after>[a-z0-9]{7,}) '
+                          r'(?P<perms>[0-9]{6})')
 
     def source(self, name, blob):
-        cmd = 'git show %s' % blob
+        cmd = 'git show %s -- %s' % (blob, name)
         stdout, stderr = self.shell(cmd)
+
+        # If the index hash specified in the diff doesn't exist, this
+        # might be a unstaged/cached change.  We can validate by
+        # comparing the hash in the diff, with the hash of the file on
+        # disk, if the same... use that file exactly as is.  Once they
+        # add the change to the index, git show will be able to fetch
+        # the contents by the hash (avoiding this lookup).
+        if 'bad revision' in stderr:
+            cmd = 'git hash-object %s' % name
+            stdout, stderr_inner = self.shell(cmd)
+            if stdout.startswith(blob):
+                stdout = open(name).read()
+            else:
+                print('Error when running:', cmd)
+                print(stderr)
+
         return SourceFile(name, stdout)
 
     def fetch_source_files(self, names, blobs):
@@ -89,15 +105,26 @@ class Client(object):
 
         diffs = self.parser.fetch_diffs()
         if diffs:
+            if os.environ.get('debug'):
+                for diff in diffs:
+                    print('Before:')
+                    print(diff['before']['contents'][:100])
+                    print('After:')
+                    print(diff['after']['contents'][:100])
+
             request = urllib2.Request(URL, json.dumps(diffs))
             response = urllib2.urlopen(request)
             payload = json.loads(response.read())
-            url = payload['data']['url']
+            if payload['success']:
+                url = payload['data']['url']
 
-            if options.browser:
-                webbrowser.open(url)
+                if options.browser:
+                    webbrowser.open(url)
 
-            print url
+                print(url)
+            else:
+                print(payload['exception'])
+
 
     def getopts(self):
         p = optparse.OptionParser('Usage: %prog [options]')
