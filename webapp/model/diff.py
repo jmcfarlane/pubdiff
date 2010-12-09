@@ -22,7 +22,7 @@ class Diff(object):
     def __init__(self, before, after):
         self._before = SourceFile(before)
         self._after = SourceFile(after)
-        self.width = self._before.cols + self._after.cols
+        self.width = self.calculate_width()
         self.lines = self.process()
 
     def __str__(self):
@@ -35,6 +35,11 @@ class Diff(object):
             lines.append(self.parse(line))
 
         return lines
+
+    def calculate_width(self):
+        widths = [self._before.cols, self._after.cols]
+        widths.sort()
+        return widths.pop() * 2
 
     @property
     def after(self):
