@@ -1,3 +1,8 @@
+# Python imports
+import os
+import sys
+import traceback
+
 # Third party imports
 from chula import webservice
 
@@ -21,7 +26,18 @@ class Home(base.Controller):
 
     @webservice.expose()
     def upload(self):
-        uploaded = review.UploadedReview(self.env.form_raw)
-        url = '%s/r/%s' % (self.env['ajax_uri'], uploaded.review_id)
+        try:
+            uploaded = review.UploadedReview(self.env.form_raw)
+            url = '%s/r/%s' % (self.env['ajax_uri'], uploaded.review_id)
 
-        return {'url':url}
+            return {'url':url}
+        except Exception, ex:
+            if os.environ.get('debug'):
+                etype, value, tb = sys.exc_info()
+                error_context = traceback.format_tb(tb)
+                error_msg = traceback.format_exception_only(etype, value)
+                for line in error_context:
+                    print(line)
+                print(error_msg)
+
+            raise

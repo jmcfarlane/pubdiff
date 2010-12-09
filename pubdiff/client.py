@@ -46,10 +46,13 @@ class GitParser(DiffParser):
     RE_PATTERN = re.compile(r'^diff --git')
     RE_BLOBS = re.compile(r'index '
                           r'(?P<before>[a-z0-9]{7,})\.\.'
-                          r'(?P<after>[a-z0-9]{7,}) '
-                          r'(?P<perms>[0-9]{6})')
+                          r'(?P<after>[a-z0-9]{7,}) ?'
+                          r'(?P<perms>[0-9]{6})?')
 
     def source(self, name, blob):
+        if blob ==  '0000000':
+            return SourceFile(name, '')
+
         cmd = 'git show %s -- %s' % (blob, name)
         stdout, stderr = self.shell(cmd)
 
@@ -81,8 +84,14 @@ class GitParser(DiffParser):
         for i, line in enumerate(self.diff):
             blobs = GitParser.RE_BLOBS.match(line)
             if blobs:
-                names = GitParser.RE_FILE_NAMES.search(self.diff[i - 1])
-                diffs.append(self.fetch_source_files(names, blobs))
+                for p in xrange(15):
+                    previous = self.diff[i - p]
+                    names = GitParser.RE_FILE_NAMES.search(self.diff[i - p])
+                    if names:
+                        diffs.append(self.fetch_source_files(names, blobs))
+                        break
+                else:
+                    print('Failed to find the files names for this diff')
 
         return diffs
 
@@ -108,9 +117,9 @@ class Client(object):
             if os.environ.get('debug'):
                 for diff in diffs:
                     print('Before:')
-                    print(diff['before']['contents'][:100])
+                    print(diff['before']['contents'])
                     print('After:')
-                    print(diff['after']['contents'][:100])
+                    print(diff['after']['contents'])
 
             request = urllib2.Request(URL, json.dumps(diffs))
             response = urllib2.urlopen(request)
