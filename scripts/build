@@ -10,9 +10,12 @@ SUPPORT_PYTHON26_WIN32=false
 SUPPORT_PYTHON31=false
 SUPPORT_PYTHON31_WIN32=false
 
+# Source tarball
+python setup.py -q sdist upload
+
 # Python-2.6
 if [ "$SUPPORT_PYTHON26" == true ]; then
-    python2.6 setup.py -q bdist_egg
+    python2.6 setup.py -q bdist_egg upload clean
 fi
 
 echo "Generated:"
