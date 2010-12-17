@@ -9,7 +9,7 @@ import sys
 import urllib2
 import webbrowser
 
-config = ConfigParser.ConfigParser({'url':'http://localhost:8080'})
+config = ConfigParser.ConfigParser({'url':'http://www.pubdiff.com'})
 config.read(os.path.expanduser('~/.pubdiffrc'))
 
 AFTER = 'after'
@@ -17,7 +17,7 @@ BEFORE = 'before'
 CONTENTS = 'contents'
 NAME = 'name'
 URL = config.get('core', 'url') + '/api/upload'
-VERSION = '0.0.2.dev'
+VERSION = '0.0.3'
 
 class SourceFile(dict):
     def __init__(self, name=None, contents=None):
