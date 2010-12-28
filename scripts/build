@@ -9,14 +9,25 @@ SUPPORT_PYTHON26=true
 SUPPORT_PYTHON26_WIN32=false
 SUPPORT_PYTHON31=false
 SUPPORT_PYTHON31_WIN32=false
+UPLOAD=${upload:-false}
+
+# Should we upoad to pypi or not?
+if [ "$UPLOAD" == true ] && [ -f ~/.pypirc ]; then
+    UPLOAD='upload'
+else
+    UPLOAD=''
+fi
 
 # Source tarball
-python setup.py -q sdist upload
+python setup.py -q sdist $UPLOAD
 
 # Python-2.6
 if [ "$SUPPORT_PYTHON26" == true ]; then
-    python2.6 setup.py -q bdist_egg upload clean
+    python2.6 setup.py -q $UPLOAD clean
 fi
+
+# Cleaup
+rm -f MANIFEST
 
 echo "Generated:"
 for file in $(ls dist); do

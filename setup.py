@@ -1,9 +1,7 @@
 # Python imports
+from distutils.core import setup
 import os
 import sys
-
-# Third party imports
-from setuptools import setup
 
 # Project imports
 from pubdiff import client
@@ -31,13 +29,9 @@ setup(
     classifiers = [c for c in CLASSIFIERS.split('\n') if c],
     description = DESCRIPTION,
     download_url = '%s/downloads/Pubdiff-%s.tar.gz' % (URL, client.VERSION),
-    entry_points = """
-        [console_scripts]
-        pubdiff = pubdiff.client:main
-    """,
     name = NAME,
     packages = ['pubdiff'],
+    scripts = ['scripts/pubdiff'],
     url = URL,
-    version = client.VERSION,
-    zip_safe = True,
+    version = client.VERSION
 )
