@@ -1,4 +1,5 @@
 <%inherit file="/base.tmpl"/>
+<%! from model import ui %>
 
 %for diff_idx, diff in enumerate(model['diffs']):
   <div class="div-container">
@@ -9,95 +10,36 @@
 <%def name="render_diff(diff_idx, diff)">
   <div id="diff" class="diff${diff_idx}">
     <div class="before">
-      <h1>
-        ${diff['before']['name']}
-      </h1>
-      <pre class="brush:${diff['before']['brush']}">${code(diff, 0)}</pre>
+      <h2>${diff['before']['name']}</h2>
+      <pre>${code(diff, 0)}</pre>
     </div>
-    <div>
-      <h1>&nbsp;</h1>
-      <pre class="column change">${changes(diff) | h}</pre>
+    <div class="delta">
+      <h2>&nbsp;</h2>
+      <pre>${changes(diff) | h}</pre>
     </div>
     <div class="after">
-      <h1>
-        ${diff['after']['name']}
-      </h1>
-      <pre class="brush:${diff['after']['brush']}">${code(diff, 2)}</pre>
+      <h2>${diff['after']['name']}</h2>
+      <pre>${code(diff, 2)}</pre>
     </div>
   </div>
 </%def>
 
 <%def name="code(diff, position)">
+<ol>
   %for columns in diff['lines']:
-${columns[position] | h}
+  % if position == 0:
+<li class="${columns[1] | ui.diff_before}">${columns[position] | h}</li>
+  % elif position == 2:
+<li class="${columns[1] | ui.diff_after}">${columns[position] | h}</li>
+  % endif
   %endfor
+</ol>
 </%def>
 
 <%def name="changes(diff)">
-
+<ol>
   %for before, change, after in diff['lines']:
-${change}
+<li>${change | trim}</li>
   %endfor
-</%def>
-
-<%def name="css()">
-  <link type="text/css" rel="stylesheet"
-        href="/syntaxhighlighter_3.0.83/styles/shCore.css" />
-  <link type="text/css" rel="stylesheet"
-        href="/syntaxhighlighter_3.0.83/styles/shThemeDefault.css" />
-
-  ${parent.css()}
-</%def>
-
-<%def name="javascript()">
-  ${parent.javascript()}
-
-  <script type="text/javascript"
-          src="/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
-  <script type="text/javascript"
-          src="/syntaxhighlighter_3.0.83/scripts/shAutoloader.js"></script>
-  <script type="text/javascript">
-    SyntaxHighlighter.autoloader(
-    'bash sh    /syntaxhighlighter_3.0.83/scripts/shBrushBash.js',
-    'cpp        /syntaxhighlighter_3.0.83/scripts/shBrushCpp.js',
-    'csharp     /syntaxhighlighter_3.0.83/scripts/shBrushCSharp.js',
-    'css        /syntaxhighlighter_3.0.83/scripts/shBrushCss.js',
-    'diff       /syntaxhighlighter_3.0.83/scripts/shBrushDiff.js',
-    'groovy     /syntaxhighlighter_3.0.83/scripts/shBrushGroovy.js',
-    'javascript /syntaxhighlighter_3.0.83/scripts/shBrushJScript.js',
-    'java       /syntaxhighlighter_3.0.83/scripts/shBrushJava.js',
-    'perl       /syntaxhighlighter_3.0.83/scripts/shBrushPerl.js',
-    'php        /syntaxhighlighter_3.0.83/scripts/shBrushPhp.js',
-    'plain      /syntaxhighlighter_3.0.83/scripts/shBrushPlain.js',
-    'python     /syntaxhighlighter_3.0.83/scripts/shBrushPython.js',
-    'ruby       /syntaxhighlighter_3.0.83/scripts/shBrushRuby.js',
-    'scala      /syntaxhighlighter_3.0.83/scripts/shBrushScala.js',
-    'sql        /syntaxhighlighter_3.0.83/scripts/shBrushSql.js',
-    'vb         /syntaxhighlighter_3.0.83/scripts/shBrushVb.js',
-    'xml        /syntaxhighlighter_3.0.83/scripts/shBrushXml.js'
-    );
-    SyntaxHighlighter.all();
-  </script>
-  <script type="text/javascript" src="/diff.js"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      %for diff_idx, diff in enumerate(model['diffs']):
-        %for line_idx, columns in enumerate(diff['lines']):
-          <% 
-            change = columns[1].strip()
-            position = line_idx + 1
-          %>
-
-          %if change == '>':
-            added(${diff_idx}, ${position});
-          %elif change == '|':
-            modified(${diff_idx}, ${position});
-          %elif change == '<':
-            removed(${diff_idx}, ${position});
-          %endif
-        %endfor
-      %endfor
-    });
-  </script>
+</ol>
 </%def>

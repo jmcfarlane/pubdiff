@@ -1,9 +1,6 @@
-H1 {
-  font-size: 1em;
-}
-
-.div-container {
-  clear: both;
+#diff H2 {
+  margin-bottom: 4px;
+  margin-top: 0;
 }
 
 #diff DIV {
@@ -11,24 +8,46 @@ H1 {
 }
 
 #diff .before, #diff .after {
-  max-width: 48%;
+  max-width: 50%;
   min-width: 48%;
   overflow: auto;
+  width: 48%;
 }
 
-#diff .before H1, #diff .after H1 {
-  margin-left: 32px;
-}
-
-.change {
-  width: 8px;
-  text-align: center;
+#diff .delta {
   background-color: #dddddd;
-  margin: 0 8px !important;
-  font-size: 12px;
-  line-height: 1.1em !important;
+  font-weight: bold;
+  margin-left: 4px;
+  margin-right: 4px;
+  text-align: center;
+  width: 15px;
 }
 
-.syntaxhighlighter * .code, .syntaxhighlighter * .gutter {
-  font-size: 12px !important;
+#diff PRE {
+  margin: 0;
+}
+
+#diff OL {
+  margin: 0;
+  padding: 0;
+}
+
+#diff OL LI {
+  display: inline;
+  font-family: "courier new",	courier, monospace;
+  font-size: 12px;
+  line-height: 12px; /* For Firefox */
+  list-style-type: none;
+}
+
+#diff LI.content-added {
+  background-color: palegreen;
+}
+
+#diff LI.content-changed {
+  background-color: yellow;
+}
+
+#diff LI.content-removed {
+  background-color: pink;
 }
