@@ -12,7 +12,7 @@ app = config.Config()
 app.classpath = 'controller'
 app.construction_controller = 'error'
 app.construction_trigger = '/tmp/pubdiff/site.stop'
-app.debug = False
+app.debug = 'debug' in os.environ
 app.error_controller = 'error'
 app.session = False
 app.local.root = os.path.join(os.getcwd(), 'webapp')
@@ -22,6 +22,7 @@ app.mapper = (
     # Home controller
     (r'^$', 'home.index'),
     (review.RE_REVIEW.pattern, 'home.review'),
+    (r'^/recent/?$', 'home.recent_reviews'),
 
     # API controllers
     (r'^/api/upload/?$', 'home.upload'),

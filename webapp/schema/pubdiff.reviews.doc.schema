@@ -1,0 +1,29 @@
+{
+  "diffs": [
+    {
+      "after": {
+        "name": "/%(file.name)s:after",
+        "brush": "plain"
+      },
+      "lines": [
+        [
+          "line 1 contents (before)",
+          "change marker: <>",
+          "line 1 contents (after)"
+        ],
+        [
+          "line 2 contents (before)",
+          "change marker: <>",
+          "line 2 contents (after)"
+        ]
+      ],
+      "before": {
+        "name": "/%(file.name)s:before",
+        "brush": "plain"
+      }
+    }
+  ],
+  "_id": "5fe3231da693907688390f7ec98226c06a956b7f",
+  "_rev":"1-fc5133e52fa27823f2591658def44c61",
+  "created": 1298103374.8722191
+}

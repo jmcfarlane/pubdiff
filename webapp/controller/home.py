@@ -4,7 +4,7 @@ import sys
 import traceback
 
 # Third party imports
-from chula import webservice
+from chula import data, webservice
 
 # Pubdiff imports
 from model import review
@@ -23,6 +23,14 @@ class Home(base.Controller):
             return self.render('/diff.tmpl')
 
         return self.render('/diff_not_found.tmpl')
+
+    def recent_reviews(self):
+        self.model.recent = review.Reviews().recent()
+        for r in self.model.recent:
+            created_dt = data.str2date(str(r['created']))
+            r['created'] = created_dt.strftime(review.DATE_FORMAT)
+
+        return self.render('/recent_reviews.tmpl')
 
     @webservice.expose()
     def upload(self):

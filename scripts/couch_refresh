@@ -1,0 +1,63 @@
+#! /bin/bash
+
+host=http://127.0.0.1
+port=5984
+
+cd $(dirname $(which $0))/../webapp/schema/view
+
+function server {
+    echo "$host:$port"
+}
+
+function escape {
+    echo $1 | sed -e 's|/|%2F|g'
+}
+
+function fetch_rev {
+    db=$(escape $1)
+    doc=$2
+    curl -s $(server)/$db/$doc | grep -o -E '[0-9]+-[0-9a-z]{32}'
+}
+
+function check_db {
+    db=$(escape $1)
+    curl -s $(server)/$db
+}
+
+function persist {
+    code=$1
+    tokenized=$code.temp
+
+    # Calclulate a few things we need
+    db=$(grep -o -E 'db:[a-z0-9/_,]+$' $code | cut -d: -f2)
+    doc=$(grep -o -E 'doc:[a-z0-9/_]+$' $code | cut -d: -f2)
+
+    IFS=","
+    for mydb in ${db[@]}; do
+        # Calculate the escaped db url, and create the db if needed
+        mydb=$(escape $mydb)
+        if [[ "$(check_db "$mydb")" =~ "error" ]]; then
+            echo -n "Creating db ($mydb): "
+            curl -X PUT $(server)/$mydb
+        fi
+
+        # Fetch the current doc revision and use it for update (vs create)
+        rev=$(fetch_rev "$mydb" "$doc")
+        if [ "$rev" == "" ]; then
+            echo -n "Creating new doc ($doc): "
+            cat $code | grep -v -e '^//' -e '.*__REV__' > $tokenized
+        else
+            echo -n "Updating existing doc ($doc): "
+            cat $code | grep -v '^//' | sed -e "s|__REV__|$rev|g" > $tokenized
+        fi
+
+        # Persist or update the doc
+        curl -X PUT $(server)/$mydb/$doc -d @$tokenized
+    done
+    rm -f $tokenized
+}
+
+# Loop over all the json files and persist them
+for json in $(ls); do
+    persist $json
+done

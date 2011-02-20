@@ -1,0 +1,10 @@
+<%inherit file="/base.tmpl"/>
+
+<h1>Recent reviews</h1>
+
+% for i, review in enumerate(model.recent):
+  <div>
+    ${i + 1}. <a href="/r/${review.id}">Created: ${review['created']}</a>
+    (Files modified: ${review['files_changed']})
+  </div>
+% endfor

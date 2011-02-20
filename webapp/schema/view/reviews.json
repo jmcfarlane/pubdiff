@@ -1,0 +1,22 @@
+// The two lines below determine the db and doc id, do not delete!
+// db:pubdiff/reviews
+// doc:_design/reviews
+
+{
+  "_rev" : "__REV__",
+  "views" : {
+    "recent" : {
+      "map" :
+        "function (doc) {
+          emit(
+            [doc.created, doc._id],
+            {
+              'created': doc.created,
+              'files_changed': doc.diffs.length
+            }
+          )
+        }"
+    }
+
+  }
+}

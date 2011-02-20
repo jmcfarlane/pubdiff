@@ -15,6 +15,7 @@ sys.path.insert(0, os.getcwd())
 # Pubdiff immports
 from model import diff
 
+DATE_FORMAT = '%c'
 RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
 RE_BASENAME = re.compile(r':(before|after)')
 BRUSH_MAP = {
@@ -57,6 +58,22 @@ class Review(couch.Document):
             id = str(time.time())
 
         super(Review, self).__init__(id, **kwargs)
+
+# todo: Move this class to chula:
+class ReadonlyGenericDocument(dict):
+    def __init__(self, id, contents):
+        self.id = id
+        self.update(contents)
+
+class Reviews(couch.Documents):
+    DB = Review.DB
+
+    def recent(self, **kwargs):
+        view = 'reviews/recent'
+        reviews = self.view(view, ReadonlyGenericDocument, **kwargs)
+        reviews.sort(reverse=True)
+
+        return reviews
 
 class UploadedReview(list):
     def __init__(self, json_string):
