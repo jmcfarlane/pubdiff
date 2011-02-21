@@ -1,6 +1,8 @@
 #diff H2 {
   margin-bottom: 4px;
   margin-top: 0;
+  overflow: auto;
+  white-space: nowrap;
 }
 
 #diff DIV {
@@ -11,7 +13,7 @@
   max-width: 50%;
   min-width: 48%;
   overflow: auto;
-  width: 48%;
+  width: 49%;
 }
 
 #diff .delta {
