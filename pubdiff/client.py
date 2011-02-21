@@ -96,11 +96,11 @@ class GitParser(DiffParser):
         return diffs
 
 class Client(object):
-    def __init__(self):
-        self.stdin = sys.stdin.read()
-        self.parser = self.fetch_parser(self.stdin)
-
     def fetch_parser(self, diff):
+        if not diff:
+            msg = 'No diff provided (missing --cached maybe?)'
+            raise EmptyDiffError(msg)
+
         for cls in [GitParser]:
             if cls.RE_PATTERN.match(diff):
                 return cls(self.stdin)
@@ -111,6 +111,17 @@ class Client(object):
     def main(self):
         # Parse command line options
         (options, args) = self.getopts()
+
+        # Expose some of the options as member variables
+        self.debug = options.debug
+
+        if options.version:
+            print 'pubdiff version %s' % VERSION
+            sys.exit(1)
+
+        # Fetch standard input, and a supported parser
+        self.stdin = sys.stdin.read()
+        self.parser = self.fetch_parser(self.stdin)
 
         diffs = self.parser.fetch_diffs()
         if diffs:
@@ -134,20 +145,41 @@ class Client(object):
             else:
                 print(payload['exception'])
 
-
     def getopts(self):
-        p = optparse.OptionParser('Usage: %prog [options]')
-        p.add_option('-b', '--browser', dest='browser', action='store_true')
+        p = optparse.OptionParser('Usage: [diff cmd] | %prog [options]')
+        p.add_option('-b', '--browser',
+                     action='store_true',
+                     dest='browser',
+                     help='Automatically open the diff in a web browser')
+        p.add_option('-d', '--debug',
+                     action='store_true',
+                     dest='debug',
+                     help='Include debugging output')
+        p.add_option('-v', '--version',
+                     action='store_true',
+                     dest='version',
+                     help='Display current version of this program')
         p.set_defaults(browser=False)
+        p.set_defaults(debug=False)
+        p.set_defaults(version=False)
 
         return p.parse_args()
+
+class EmptyDiffError(Exception):
+    pass
 
 class UnsupportedClientError(Exception):
     pass
 
 def main():
     client = Client()
-    client.main()
+
+    try:
+        client.main()
+    except Exception, ex:
+        print ex
+        if client.debug:
+            raise
 
 if __name__ == '__main__':
     main()
