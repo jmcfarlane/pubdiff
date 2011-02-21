@@ -17,7 +17,7 @@ BEFORE = 'before'
 CONTENTS = 'contents'
 NAME = 'name'
 URL = config.get('core', 'url') + '/api/upload'
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 
 class SourceFile(dict):
     def __init__(self, name=None, contents=None):
@@ -34,7 +34,7 @@ class DiffParser(object):
         self.cwd = os.getcwd()
         self.diff = stdin.split('\n')
 
-    def diffs(self):
+    def fetch_diffs(self):
         raise NotImplementedError('fetch_diffs() must be implementd')
 
     def shell(self, cmd):
