@@ -17,7 +17,7 @@ BEFORE = 'before'
 CONTENTS = 'contents'
 NAME = 'name'
 URL = config.get('core', 'url') + '/api/upload'
-VERSION = '0.0.5'
+VERSION = '0.0.5a'
 
 class SourceFile(dict):
     def __init__(self, name=None, contents=None):

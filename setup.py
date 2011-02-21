@@ -9,7 +9,7 @@ from pubdiff import client
 # Attributes
 SRC = os.path.dirname(sys.argv[0])
 AUTHOR = 'John McFarlane'
-DESCRIPTION = open(os.path.join(SRC, 'README')).readlines()[0].strip()
+DESCRIPTION = 'Easy, anonymous, and public code diffs'
 EMAIL = 'john.mcfarlane@rockfloat.com'
 NAME = 'Pubdiff'
 URL = 'http://www.pubdiff.com'
