@@ -1,6 +1,7 @@
 from subprocess import Popen, PIPE
 
 NEWLINE = '\n'
+GNU_DIFF_CENTER_WIDTH = 3
 
 class SourceFile(object):
     def __init__(self, path):
@@ -9,13 +10,13 @@ class SourceFile(object):
             self.name = fh.name
 
     @property
-    def cols(self):
+    def max_line_length(self):
         longest = 0
         for line in self.lines:
             length = len(line)
             if length > longest:
                 longest = length
-        
+
         return longest
 
 class Diff(object):
@@ -37,9 +38,8 @@ class Diff(object):
         return lines
 
     def calculate_width(self):
-        widths = [self._before.cols, self._after.cols]
-        widths.sort()
-        return widths.pop() * 2
+        widths = [self._before.max_line_length, self._after.max_line_length]
+        return max(widths) * 2 + GNU_DIFF_CENTER_WIDTH
 
     @property
     def after(self):
@@ -48,7 +48,7 @@ class Diff(object):
     @property
     def before(self):
         return NEWLINE.join(part[0] for part in self.lines)
-        
+
     def calculate_delta(self, delta):
         mapping = {'>':'Added',
                    '|':'Modified',
@@ -59,7 +59,7 @@ class Diff(object):
 
     def parse(self, line):
         zb_mid_point = (self.width / 2) - 1
-        zb_mid_width = 3
+        zb_mid_width = GNU_DIFF_CENTER_WIDTH
         if line:
             before =  line[:zb_mid_point]
             after = line[zb_mid_point + zb_mid_width:]
@@ -80,7 +80,7 @@ class Diff(object):
         # Execute the command and capture output
         output = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         stdout, stderr = output.communicate()
-        
+
         return self._analyze(stdout)
 
 def main():
