@@ -1,4 +1,4 @@
 include LICENSE
-include README
+include README.rst
 include scripts/pubdiff
 recursive-include pubdiff *.py
