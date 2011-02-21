@@ -2,8 +2,9 @@
   "diffs": [
     {
       "after": {
-        "name": "/%(file.name)s:after",
-        "brush": "plain"
+        "label": "/%(file.name)s (after)",
+        "language": "plain",
+        "name": "/%(file.name)s:after"
       },
       "lines": [
         [
@@ -18,8 +19,9 @@
         ]
       ],
       "before": {
-        "name": "/%(file.name)s:before",
-        "brush": "plain"
+        "label": "/%(file.name)s (before)",
+        "language": "plain",
+        "name": "/%(file.name)s:before"
       }
     }
   ],

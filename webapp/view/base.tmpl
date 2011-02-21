@@ -5,19 +5,15 @@
   </head>
 
   <body>
-    <div id="body">
-      ${self.body()}
-    </div>
+    ${self.body()}
     ${self.javascript()}
   </body>
 </html>
 
 ## Overloadable functions
-<%def name="title()">
-  PubDiff
-</%def>
+<%def name="title()">PubDiff</%def>
 
-<%def name="css()">
+<%def name="css()">\
   <link href="/style.css" rel="stylesheet" type="text/css" />
 </%def>
 

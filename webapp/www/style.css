@@ -1,11 +1,70 @@
-#diff H2 {
+/* General look and feel */
+html { font-size:100.01%; }
+body {
+  background-color: #22252A;
+  color: #eee;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 130%;
+}
+
+h1.logo {
+  color: orange;
+}
+
+h1, h2 {
+  color: #4a4a4a;
+}
+
+h3 {
+  color: #eee;
+}
+
+a:focus, a:hover {
+  color: #09f;
+}
+
+a {
+  color: #06c;
+  text-decoration: none;
+}
+
+/* Howto steps */
+ol.howto {
+  font-size: 120%;
+}
+
+ol.howto label{
+  color: green;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+ol.howto div{
+  margin-top: 10px;
+}
+
+ol.howto code{
+  border: 1px solid #4a4a4a;
+  display: block;
+  margin-bottom: 20px;
+  margin-top: 8px;
+  padding: 1px 4px;
+  width: 600px;
+}
+
+/* Diff view */
+#diff h2 {
+  border-bottom: 1px solid black;
+  color: orange;
+  font-size: 85%;
   margin-bottom: 4px;
   margin-top: 0;
   overflow: auto;
+  padding-bottom: 2px;
   white-space: nowrap;
 }
 
-#diff DIV {
+#diff div {
   float: left;
 }
 
@@ -17,7 +76,7 @@
 }
 
 #diff .delta {
-  background-color: #dddddd;
+  background-color: #4a4a4a;
   font-weight: bold;
   margin-left: 4px;
   margin-right: 4px;
@@ -25,31 +84,33 @@
   width: 15px;
 }
 
-#diff PRE {
+#diff pre {
   margin: 0;
 }
 
-#diff OL {
+#diff ol {
   margin: 0;
   padding: 0;
+  font-size: 12px;
+  line-height: 130%;
 }
 
-#diff OL LI {
+#diff ol li {
   display: inline;
-  font-family: "courier new",	courier, monospace;
-  font-size: 12px;
-  line-height: 12px; /* For Firefox */
   list-style-type: none;
 }
 
-#diff LI.content-added {
-  background-color: palegreen;
+#diff li.content-added {
+  background-color: #79a5d4;
+  color: black;
 }
 
-#diff LI.content-changed {
-  background-color: yellow;
+#diff li.content-changed {
+  background-color: #c78d21;
+  color: black;
 }
 
-#diff LI.content-removed {
-  background-color: pink;
+#diff li.content-removed {
+  background-color: #ef2929;
+  color: white;
 }

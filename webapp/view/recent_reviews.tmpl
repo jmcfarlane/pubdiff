@@ -1,10 +1,14 @@
 <%inherit file="/base.tmpl"/>
 
-<h1>Recent reviews</h1>
+<h1 class="logo">
+  Pubdiff == [easy, anonymous, public]
+</h2>
 
-% for i, review in enumerate(model.recent):
-  <div>
-    ${i + 1}. <a href="/r/${review.id}">Created: ${review['created']}</a>
+<ol>
+% for review in model.recent:
+  <li>
+    <a href="/r/${review.id}">Created: ${review['created']}</a>
     (Files modified: ${review['files_changed']})
-  </div>
+  </li>
 % endfor
+</ol>

@@ -18,29 +18,29 @@ from model import diff
 DATE_FORMAT = '%c'
 RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
 RE_BASENAME = re.compile(r':(before|after)')
-BRUSH_MAP = {
-             'bash':'sh',
-             'c':'cpp',
-             'c#':'csharp',
-             'cpp':'cpp',
-             'css':'css',
-             'dash':'sh',
-             'diff':'diff',
-             'groovy':'groovy',
-             'java':'java',
-             'js':'javascript',
-             'patch':'diff',
-             'php':'php',
-             'pl':'perl',
-             'pm':'perl',
-             'py':'python',
-             'rb':'ruby',
-             'sh':'sh',
-             'sql':'sql',
-             'vb':'vb',
-             'xml':'xml',
-             'zsh':'sh',
-            }
+LANGUAGE_MAP = {
+                'bash':'sh',
+                'c':'cpp',
+                'c#':'csharp',
+                'cpp':'cpp',
+                'css':'css',
+                'dash':'sh',
+                'diff':'diff',
+                'groovy':'groovy',
+                'java':'java',
+                'js':'javascript',
+                'patch':'diff',
+                'php':'php',
+                'pl':'perl',
+                'pm':'perl',
+                'py':'python',
+                'rb':'ruby',
+                'sh':'sh',
+                'sql':'sql',
+                'vb':'vb',
+                'xml':'xml',
+                'zsh':'sh',
+               }
 
 class Diff(dict):
     def __init__(self):
@@ -119,7 +119,7 @@ class UploadedReview(list):
         finally:
             shutil.rmtree(self.temp_dir)
 
-    def brush(self, path):
+    def language(self, path):
         actual_filename = os.path.basename(RE_BASENAME.sub('', path))
         extension = ''
         parts = actual_filename.rsplit('.', 1)
@@ -127,7 +127,7 @@ class UploadedReview(list):
         if parts:
             extension = parts.pop()
 
-        return BRUSH_MAP.get(extension.lower(), 'plain')
+        return LANGUAGE_MAP.get(extension.lower(), 'plain')
 
     def persist(self, review_id):
         # Instantiate and clean a review model object
@@ -143,9 +143,12 @@ class UploadedReview(list):
             d = Diff()
             d['lines'] = parsed.lines
             d['after']['name'] = self.hash2path(parsed._after.name)
-            d['after']['brush'] = self.brush(d['after']['name'])
             d['before']['name'] = self.hash2path(parsed._before.name)
-            d['before']['brush'] = self.brush(d['before']['name'])
+
+            # Make any name based structure mutations
+            for s in ['before', 'after']:
+                d[s]['language'] = self.language(d[s]['name'])
+                d[s]['label'] = d[s]['name'].replace(':%s' % s, ' (%s)' % s)
 
             review['diffs'].append(d)
 

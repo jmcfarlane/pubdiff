@@ -10,7 +10,7 @@
 <%def name="render_diff(diff_idx, diff)">
   <div id="diff" class="diff${diff_idx}">
     <div class="before">
-      <h2>${diff['before']['name']}</h2>
+      <h2>${diff['before']['label']}</h2>
       <pre>${code(diff, 0)}</pre>
     </div>
     <div class="delta">
@@ -18,7 +18,7 @@
       <pre>${changes(diff) | h}</pre>
     </div>
     <div class="after">
-      <h2>${diff['after']['name']}</h2>
+      <h2>${diff['after']['label']}</h2>
       <pre>${code(diff, 2)}</pre>
     </div>
   </div>

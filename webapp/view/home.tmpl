@@ -1,8 +1,35 @@
 <%inherit file="/base.tmpl"/>
 
-<h1>Pubdiff: easy, anonymous, public code diffs</h1>
+<h1 class="logo">
+  Pubdiff == [easy, anonymous, public]
+</h1>
 
-<p>
-  I guess this service is still in stealth mode or whatever, thus this
-  page is intentionally empty.
-</p>
+<ol class="howto">
+  <li>
+    <label>Installation</label>
+    <div>
+      Preferred:
+      <code>sudo pip install -U pubdiff</code>
+
+      Alternate:
+      <code>sudo easy_install -U pubdiff</code>
+    </div>
+  </li>
+
+  <li>
+    <label>Usage</label>
+    <div>
+      <code>
+        git add files you changed<br/>
+        git diff --cached | pubdiff
+      </code>
+    </div>
+  </li>
+
+  <li>
+    <label>Share</label>
+    <div>
+      Send the pubdiff to whoever you want :)
+    </div>
+  </li>
+</ol>
