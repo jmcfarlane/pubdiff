@@ -12,6 +12,7 @@ AUTHOR = 'John McFarlane'
 DESCRIPTION = 'Easy, anonymous, and public code diffs'
 EMAIL = 'john.mcfarlane@rockfloat.com'
 NAME = 'Pubdiff'
+PYPI = 'http://pypi.python.org/packages/source/P/Pubdiff'
 URL = 'http://www.pubdiff.com'
 CLASSIFIERS = """
 Development Status :: 2 - Pre-Alpha
@@ -28,7 +29,7 @@ setup(
     author_email = EMAIL,
     classifiers = [c for c in CLASSIFIERS.split('\n') if c],
     description = DESCRIPTION,
-    download_url = '%s/downloads/Pubdiff-%s.tar.gz' % (URL, client.VERSION),
+    download_url = '%s/Pubdiff-%s.tar.gz' % (PYPI, client.VERSION),
     name = NAME,
     packages = ['pubdiff'],
     scripts = ['scripts/pubdiff'],
