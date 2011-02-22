@@ -7,7 +7,7 @@ body {
   font-size: 130%;
 }
 
-h1.logo {
+h1.logo, h1.logo a, h1.logo a:visited {
   color: orange;
 }
 
@@ -101,7 +101,7 @@ ol.howto code{
 }
 
 #diff li.content-added {
-  background-color: #79a5d4;
+  background-color: #4e9a06;
   color: black;
 }
 
@@ -111,6 +111,10 @@ ol.howto code{
 }
 
 #diff li.content-removed {
-  background-color: #ef2929;
+  background-color: #cc0000;
   color: white;
 }
+
+.added { color: #4e9a06; }
+.changed { color: #c78d21; }
+.removed { color: #cc0000; }

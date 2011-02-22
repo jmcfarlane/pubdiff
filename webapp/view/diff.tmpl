@@ -1,14 +1,24 @@
 <%inherit file="/base.tmpl"/>
 <%! from model import ui %>
 
-%for diff_idx, diff in enumerate(model['diffs']):
+## Table of contents
+<ol>
+% for diff in model['diffs']:
+  <% name = diff['after']['name'][:diff['after']['name'].find(':')] %>
+  <li><a href="#${name}">${name}</a></li>
+% endfor
+</ol>
+
+## Render each diff (left, gutter, left)
+% for diff_idx, diff in enumerate(model['diffs']):
   <div class="div-container">
     ${render_diff(diff_idx, diff)}
   </div>
-%endfor
+% endfor
 
 <%def name="render_diff(diff_idx, diff)">
   <div id="diff" class="diff${diff_idx}">
+    <a name="${diff['after']['name'][:diff['after']['name'].find(':')]}"></a>
     <div class="before">
       <h2>${diff['before']['label']}</h2>
       <pre>${code(diff, 0)}</pre>
@@ -38,8 +48,8 @@
 
 <%def name="changes(diff)">
 <ol>
-  %for before, change, after in diff['lines']:
+  % for before, change, after in diff['lines']:
 <li>${change | trim}</li>
-  %endfor
+  % endfor
 </ol>
 </%def>
