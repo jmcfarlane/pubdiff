@@ -2,12 +2,17 @@
 <%! from model import ui %>
 
 ## Table of contents
-<ol>
-% for diff in model['diffs']:
-  <% name = diff['after']['name'][:diff['after']['name'].find(':')] %>
-  <li><a href="#${name}">${name}</a></li>
-% endfor
-</ol>
+<table class="diff toc">
+  % for i, diff in enumerate(model['diffs']):
+    <% name = diff['after']['name'][:diff['after']['name'].find(':')] %>
+    <tr>
+      <td>${i + 1}. <a href="#${name}">${name}</a></td>
+      <td>|</td>
+      <td align="right">${diff['diff_stat_total']}</td>
+      <td>${diff_stat(diff)}</td>
+    </tr>
+  % endfor
+</table>
 
 ## Render each diff (left, gutter, left)
 % for diff_idx, diff in enumerate(model['diffs']):
@@ -16,8 +21,25 @@
   </div>
 % endfor
 
+<%def name="diff_stat(d)">
+  <%
+    k = 'diff_stat_'
+    width = 30
+  %>
+  % for t, s in (('added', '+'), ('removed', '-')):
+    <span class="${t}">
+      % if d[k + t] > width:
+        ${s * int(float(d[k + t]) / float(d[k + 'total']) * width)}
+      % else:
+        ${s * d[k + t]}
+      % endif
+
+    </span>
+  % endfor
+</%def>
+
 <%def name="render_diff(diff_idx, diff)">
-  <div id="diff" class="diff${diff_idx}">
+  <div id="diff${diff_idx}" class="diff">
     <a name="${diff['after']['name'][:diff['after']['name'].find(':')]}"></a>
     <div class="before">
       <h2>${diff['before']['label']}</h2>

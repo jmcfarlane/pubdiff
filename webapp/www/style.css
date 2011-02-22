@@ -53,7 +53,17 @@ ol.howto code{
 }
 
 /* Diff view */
-#diff h2 {
+.diff.toc {
+  font-size: 90%;
+  margin-bottom: 30px;
+}
+
+.diff.toc td {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.diff h2 {
   border-bottom: 1px solid black;
   color: orange;
   font-size: 85%;
@@ -64,18 +74,18 @@ ol.howto code{
   white-space: nowrap;
 }
 
-#diff div {
+.diff div {
   float: left;
 }
 
-#diff .before, #diff .after {
+.diff .before, .diff .after {
   max-width: 50%;
   min-width: 48%;
   overflow: auto;
   width: 49%;
 }
 
-#diff .delta {
+.diff .delta {
   background-color: #4a4a4a;
   font-weight: bold;
   margin-left: 4px;
@@ -84,37 +94,48 @@ ol.howto code{
   width: 15px;
 }
 
-#diff pre {
+.diff pre {
   margin: 0;
 }
 
-#diff ol {
+.diff ol {
   margin: 0;
   padding: 0;
   font-size: 12px;
   line-height: 130%;
 }
 
-#diff ol li {
+.diff ol li {
   display: inline;
   list-style-type: none;
 }
 
-#diff li.content-added {
+.diff li.content-added {
   background-color: #4e9a06;
   color: black;
 }
 
-#diff li.content-changed {
+.diff li.content-changed {
   background-color: #c78d21;
   color: black;
 }
 
-#diff li.content-removed {
+.diff li.content-removed {
   background-color: #cc0000;
   color: white;
 }
 
-.added { color: #4e9a06; }
-.changed { color: #c78d21; }
-.removed { color: #cc0000; }
+.added {
+  color: #4e9a06;
+
+}
+
+.changed {
+  color: #c78d21;
+}
+
+.removed {
+  color: #cc0000;
+  font-size: 130%;
+  line-height: 0;
+}

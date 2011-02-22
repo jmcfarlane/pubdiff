@@ -137,6 +137,7 @@ class UploadedReview(list):
         # Add this review's diffs
         for pair in self:
             parsed = diff.Diff(pair[0], pair[1])
+
             if os.environ.get('debug'):
                 parsed.pretty_print()
 
@@ -144,6 +145,21 @@ class UploadedReview(list):
             d['lines'] = parsed.lines
             d['after']['name'] = self.hash2path(parsed._after.name)
             d['before']['name'] = self.hash2path(parsed._before.name)
+
+            # Calculate a (git) diff stat
+            added = removed = total = 0
+            for mark in [p[1].strip() for p in parsed.lines]:
+                if mark in ('>', '|'):
+                    added += 1
+                    total += 1
+
+                if mark in ('<', '|'):
+                    removed += 1
+                    total += 1
+
+            d['diff_stat_added'] = added
+            d['diff_stat_removed'] = removed
+            d['diff_stat_total'] = total
 
             # Make any name based structure mutations
             for s in ['before', 'after']:
