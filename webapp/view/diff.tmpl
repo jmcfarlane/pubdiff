@@ -43,35 +43,43 @@
     <a name="${diff['after']['name'][:diff['after']['name'].find(':')]}"></a>
     <div class="before">
       <h2>${diff['before']['label']}</h2>
-      <pre>${code(diff, 0)}</pre>
+      ${code(diff, 0)}
     </div>
     <div class="delta">
       <h2>&nbsp;</h2>
-      <pre>${changes(diff) | h}</pre>
+      ${changes(diff) | h}
     </div>
     <div class="after">
       <h2>${diff['after']['label']}</h2>
-      <pre>${code(diff, 2)}</pre>
+      ${code(diff, 2)}
     </div>
   </div>
 </%def>
 
 <%def name="code(diff, position)">
-<ol>
   %for columns in diff['lines']:
-  % if position == 0:
-<li class="${columns[1] | ui.diff_before}">${columns[position] | h}</li>
-  % elif position == 2:
-<li class="${columns[1] | ui.diff_after}">${columns[position] | h}</li>
-  % endif
+    % if position == 0:
+      ${render_line(columns[position], columns, ui.diff_before)}
+    % elif position == 2:
+      ${render_line(columns[position], columns, ui.diff_after)}
+    % endif
   %endfor
-</ol>
+</%def>
+
+<%def name="render_line(line, columns, fcn)">
+  % if line.strip():
+    <pre class="${fcn(columns[1])}">${line | h}</pre>
+  % else:
+    <pre>&nbsp;</pre>
+  % endif
 </%def>
 
 <%def name="changes(diff)">
-<ol>
   % for before, change, after in diff['lines']:
-<li>${change | trim}</li>
+    % if change.strip():
+      <pre>${change | trim}</pre>
+    % else:
+      <pre>&nbsp;</pre>
+    % endif
   % endfor
-</ol>
 </%def>

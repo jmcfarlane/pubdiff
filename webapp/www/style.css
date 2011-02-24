@@ -95,32 +95,35 @@ ol.howto code{
 }
 
 .diff pre {
-  margin: 0;
-}
-
-.diff ol {
-  margin: 0;
-  padding: 0;
   font-size: 12px;
   line-height: 130%;
+  margin: 0;
+  padding: 0;
 }
 
-.diff ol li {
-  display: inline;
-  list-style-type: none;
+.after pre, .before pre {
+  border: 1px solid #22252A;
 }
 
-.diff li.content-added {
+.after pre:hover, .before pre:hover {
+  border: 1px solid red;
+}
+
+.delta pre {
+  border: 1px solid #4a4a4a;
+}
+
+.diff pre.content-added {
   background-color: #4e9a06;
   color: black;
 }
 
-.diff li.content-changed {
+.diff pre.content-changed {
   background-color: #c78d21;
   color: black;
 }
 
-.diff li.content-removed {
+.diff pre.content-removed {
   background-color: #cc0000;
   color: white;
 }
