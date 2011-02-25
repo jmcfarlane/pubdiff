@@ -21,6 +21,19 @@
   </div>
 % endfor
 
+##<div id="comment0" class="hidden">
+##  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+##  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+##  enim ad minim veniam, quis nostrud exercitation ullamco laboris
+##  nisi ut <a href="">linky linky</a> aliquip ex ea commodo
+##  <br/><br/>
+##  consequat. Duis aute irure dolor in reprehenderit in voluptate
+##  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+##  occaecat cupidatat non proident, sunt in culpa qui officia
+##  deserunt mollit anim id est laborum
+##</div>
+##<span id="comment0-icon" class="comment-icon hidden"><label>1</label></span>
+
 <%def name="diff_stat(d)">
   <%
     k = 'diff_stat_'
@@ -54,6 +67,7 @@
       ${code(diff, 2)}
     </div>
   </div>
+
 </%def>
 
 <%def name="code(diff, position)">
@@ -82,4 +96,59 @@
       <pre>&nbsp;</pre>
     % endif
   % endfor
+</%def>
+
+<%def name="css()">\
+  ${parent.css()}
+  <link href="/vendor/themes/base/jquery.ui.all.css"
+  rel="stylesheet" type="text/css" />
+</%def>
+
+<%def name="javascript()">
+  ${parent.javascript()}
+  % for c in [\
+              'jquery.ui.core.min.js',\
+              'jquery.ui.widget.min.js',\
+              'jquery.ui.mouse.min.js',\
+              'jquery.ui.draggable.min.js',\
+              'jquery.ui.position.min.js',\
+              'jquery.ui.resizable.min.js',\
+              'jquery.ui.dialog.min.js',\
+             ]:
+    <script type="text/javascript" src="/vendor/ui/minified/${c}"></script>
+  % endfor
+
+  ##<script>
+  ##  // Add a border to a commented line
+  ##  var comment = $('#diff0 .after').find('pre').get(6);
+  ##  $(comment).addClass('line-with-comment');
+
+  ##  // Add an onclick to the line to show it's comment
+  ##  $(comment).click(function(){
+  ##    $('#comment0').dialog({width:500});
+  ##    return false;
+  ##  });
+
+  ##  // Add a little icon to further illustrate the comment is present
+  ##  var offset = $(comment).offset()
+  ##  var width = $(comment).width()
+  ##  var line_top = 0;
+  ##  var line_left = 0;
+
+  ##  // Calculate offsets
+  ##  if (offset.left < 50) {
+  ##    line_left = offset.left + width + 5;
+  ##  } else {
+  ##    line_left = offset.left - 24;
+  ##  }
+
+  ##  // Move the icon into place
+  ##  $('#comment0-icon').css(
+  ##    {'position':'absolute',
+  ##     'left':line_left,
+  ##     'top':offset.top - 20
+  ##    }
+  ##  ).show();
+  ##</script>
+
 </%def>

@@ -98,7 +98,7 @@ ol.howto code{
   font-size: 12px;
   line-height: 130%;
   margin: 0;
-  padding: 0;
+  padding: 0 2px;
 }
 
 .after pre, .before pre {
@@ -141,4 +141,39 @@ ol.howto code{
   color: #cc0000;
   font-size: 130%;
   line-height: 0;
+}
+
+/* Diff comments */
+pre.line-with-comment {
+  border: 1px dotted yellow;
+}
+
+.comment-icon {
+  background-color: red;
+  display: block;
+  height: 24px;
+  text-align: center;
+  vertical-align: inherit;
+  width: 24px;
+
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  border-radius: 12px;
+}
+
+.comment-icon label {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  position: relative;
+  top: 2px;
+}
+
+/* Jquery UI dialog */
+.ui-dialog-titlebar, .ui-dialog-content {
+  font-size: 60%;
+}
+
+.hidden {
+  display: none;
 }
