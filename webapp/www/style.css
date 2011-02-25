@@ -63,6 +63,10 @@ ol.howto code{
   padding-right: 8px;
 }
 
+.diff-container {
+  overflow: auto;
+}
+
 .diff h2 {
   border-bottom: 1px solid black;
   color: orange;
