@@ -105,12 +105,17 @@ ol.howto code{
   padding: 0 2px;
 }
 
-.after pre, .before pre {
-  border: 1px solid #22252A;
+.diff pre.ui-selecting {
+  background: #4a4a4a;
 }
 
-.after pre:hover, .before pre:hover {
-  border: 1px solid red;
+.diff pre.ui-selected {
+  background: #c05e38;
+  color: white;
+}
+
+.after pre, .before pre {
+  border: 1px solid #22252A;
 }
 
 .delta pre {
@@ -178,6 +183,18 @@ pre.line-with-comment {
   font-size: 60%;
 }
 
+/*
+div.ui-dialog textarea {
+  font-size: 60%;
+  margin: auto;
+  width: auto;
+} */
+
+textarea.ui-dialog-content.ui-widget-content {
+  font-size: 55%;
+}
+
+/* Classes not to be overridden */
 .hidden {
   display: none;
 }

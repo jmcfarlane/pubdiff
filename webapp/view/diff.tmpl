@@ -113,6 +113,7 @@
               'jquery.ui.draggable.min.js',\
               'jquery.ui.position.min.js',\
               'jquery.ui.resizable.min.js',\
+              'jquery.ui.selectable.min.js',\
               'jquery.ui.dialog.min.js',\
              ]:
     <script type="text/javascript" src="/vendor/ui/minified/${c}"></script>
@@ -149,6 +150,28 @@
   ##     'top':offset.top - 20
   ##    }
   ##  ).show();
+  ##</script>
+
+  ##<script>
+  ##  $('#diff0 .after').selectable({
+  ##    stop: function () {
+
+  ##      // Extract the properites of the selected lines of code
+  ##      var lines = [];
+  ##      $('.ui-selected', this).each(function() {
+  ##        var x = $('pre').index(this);
+  ##        lines.push(this.innerHTML);
+  ##      })
+  ##      lines.push('', 'Your comment here...');
+
+  ##      // Create a div to hold the preformatted message
+  ##      var textarea = document.createElement('textarea');
+  ##      textarea.setAttribute('id', 'abc');
+  ##      textarea.innerHTML = lines.join('\n');
+  ##      $('body').append(textarea);
+  ##      $('#abc').dialog({height:300, width:600}).width('100%');
+  ##    }
+  ##  });
   ##</script>
 
 </%def>
