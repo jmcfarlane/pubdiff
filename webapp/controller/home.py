@@ -49,3 +49,31 @@ class Home(base.Controller):
                 print(error_msg)
 
             raise
+
+    @webservice.expose()
+    def comment(self):
+        diff_index = self.form.get('diff_index')
+        line_numbers = self.form.get('line_numbers')
+        msg = self.form.get('msg')
+        review_id = self.form.get('r')
+
+        assert not diff_index is None
+        assert not line_numbers is None
+        assert not msg is None
+        assert not review_id is None
+
+        # Cast datatypes
+        diff_index = int(diff_index)
+        line_numbers = line_numbers.split(',')
+
+        # Create review object to be appended/persisted
+        comment = review.Comment()
+        comment['msg'] = msg
+        comment['line_numbers'] = line_numbers
+
+        # Fetch the document, update, and persist
+        document = review.Review(review_id)
+        document['diffs'][diff_index]['comments'].append(comment)
+
+        return 'not persisting'
+        return document.persist()

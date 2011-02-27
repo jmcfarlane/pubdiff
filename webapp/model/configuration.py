@@ -26,4 +26,5 @@ app.mapper = (
 
     # API controllers
     (r'^/api/upload/?$', 'home.upload'),
+    (r'^/api/comment/persist/?$', 'home.comment'),
 )

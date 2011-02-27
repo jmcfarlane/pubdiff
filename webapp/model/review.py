@@ -42,11 +42,17 @@ LANGUAGE_MAP = {
                 'zsh':'sh',
                }
 
+class Comment(dict):
+    def __init__(self):
+        self['lines'] = []
+        self['msg'] = None
+
 class Diff(dict):
     def __init__(self):
-        self['lines'] = None
-        self['before'] = {'name':None}
         self['after'] = {'name':None}
+        self['before'] = {'name':None}
+        self['comments'] = []
+        self['line_numbers'] = []
 
 class Review(couch.Document):
     DB = 'pubdiff/reviews'

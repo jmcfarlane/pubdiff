@@ -119,59 +119,28 @@
     <script type="text/javascript" src="/vendor/ui/minified/${c}"></script>
   % endfor
 
-  ##<script>
-  ##  // Add a border to a commented line
-  ##  var comment = $('#diff0 .after').find('pre').get(6);
-  ##  $(comment).addClass('line-with-comment');
+  <script type="text/javascript" src="/diff.js"></script>
 
-  ##  // Add an onclick to the line to show it's comment
-  ##  $(comment).click(function(){
-  ##    $('#comment0').dialog({width:500});
-  ##    return false;
-  ##  });
+  ## Render the data required for comments
+  <input id="r" type="hidden" value="${model.id}" />
+  % for diff_idx, diff in enumerate(model['diffs']):
+    % for comment in diff.get('comments', ()):
+      <%
+        hash = 'msg%s%s' % (diff_idx, ''.join(comment['line_numbers']))
+        first_line = comment['line_numbers'][0]
+      %>
 
-  ##  // Add a little icon to further illustrate the comment is present
-  ##  var offset = $(comment).offset()
-  ##  var width = $(comment).width()
-  ##  var line_top = 0;
-  ##  var line_left = 0;
+      <pre id="${hash}">${comment['msg']}</pre>
+      <span id="${hash}-icon" class="comment-icon hidden">
+        <label>1</label>
+      </span>
 
-  ##  // Calculate offsets
-  ##  if (offset.left < 50) {
-  ##    line_left = offset.left + width + 5;
-  ##  } else {
-  ##    line_left = offset.left - 24;
-  ##  }
-
-  ##  // Move the icon into place
-  ##  $('#comment0-icon').css(
-  ##    {'position':'absolute',
-  ##     'left':line_left,
-  ##     'top':offset.top - 20
-  ##    }
-  ##  ).show();
-  ##</script>
-
-  ##<script>
-  ##  $('#diff0 .after').selectable({
-  ##    stop: function () {
-
-  ##      // Extract the properites of the selected lines of code
-  ##      var lines = [];
-  ##      $('.ui-selected', this).each(function() {
-  ##        var x = $('pre').index(this);
-  ##        lines.push(this.innerHTML);
-  ##      })
-  ##      lines.push('', 'Your comment here...');
-
-  ##      // Create a div to hold the preformatted message
-  ##      var textarea = document.createElement('textarea');
-  ##      textarea.setAttribute('id', 'abc');
-  ##      textarea.innerHTML = lines.join('\n');
-  ##      $('body').append(textarea);
-  ##      $('#abc').dialog({height:300, width:600}).width('100%');
-  ##    }
-  ##  });
-  ##</script>
-
+      <script>
+        applyLineCommentMakers(
+          $('#diff0 .after pre').get(${first_line}),
+          '${hash}'
+        );
+      </script>
+    % endfor
+  % endfor
 </%def>
