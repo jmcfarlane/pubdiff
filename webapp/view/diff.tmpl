@@ -155,4 +155,13 @@
       </script>
     % endfor
   % endfor
+
+  <script>
+  // Enable code comments when the dom is ready
+  $(document).ready(function () {
+    % for diff_idx, diff in enumerate(model['diffs']):
+      enableCodeComments('#diff${diff_idx} .after', ${diff_idx});
+    % endfor
+  });
+  </script>
 </%def>

@@ -109,9 +109,3 @@ function enableCodeComments(selector, diffIndex) {
     }
   });
 }
-
-// Enable code comments when the dom is ready
-$(document).ready(function () {
-  enableCodeComments('#diff0 .after', 0);
-  enableCodeComments('#diff1 .after', 1);
-});
