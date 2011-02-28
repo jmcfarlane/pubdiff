@@ -141,7 +141,7 @@
         <label>
           Comment - ${when.strftime('%c')} - ${diff['after']['label']}
         </label>
-        <pre id="${hash}">${comment['msg']}</pre>
+        <pre id="${hash}">${comment['msg'] | h}</pre>
         <span id="${hash}-icon" class="comment-icon hidden">
           <label>1</label>
         </span>
