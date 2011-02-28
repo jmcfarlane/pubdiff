@@ -157,6 +157,23 @@ pre.line-with-comment {
   border: 1px dotted yellow;
 }
 
+div.comment {
+  margin: 20px 4px 0 4px;
+  padding: 4px;
+}
+
+div.comment label {
+  font-weight: bold;
+}
+
+div.comment pre {
+  background-color: #4a4a4a;
+  border-top: 4px solid green;
+  font-size: 80%;
+  margin: 0;
+  padding: 8px;
+}
+
 .comment-icon {
   background-color: red;
   display: block;

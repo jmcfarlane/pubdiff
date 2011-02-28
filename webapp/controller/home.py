@@ -75,5 +75,4 @@ class Home(base.Controller):
         document = review.Review(review_id)
         document['diffs'][diff_index]['comments'].append(comment)
 
-        return 'not persisting'
         return document.persist()

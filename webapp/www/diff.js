@@ -4,7 +4,7 @@ function applyLineCommentMakers(line, comment) {
 
   // Add an onclick to the line to show it's comment
   $('#' + comment + '-icon').click(function(){
-    $('#' + comment).dialog({width:500});
+    $('#' + comment).clone().dialog({width:500});
     return false;
   });
 

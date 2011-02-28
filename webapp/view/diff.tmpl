@@ -1,5 +1,8 @@
 <%inherit file="/base.tmpl"/>
-<%! from model import ui %>
+<%!
+  from model import ui
+  from datetime import datetime
+%>
 
 ## Table of contents
 <table class="diff toc">
@@ -10,6 +13,18 @@
       <td>|</td>
       <td align="right">${diff['diff_stat_total']}</td>
       <td>${diff_stat(diff)}</td>
+      <td>
+        % if diff['comments']:
+          Comments:
+          <%
+            comments = []
+            for i, comment in enumerate(diff['comments']):
+                msg = '<a href="#comment%s%s">%s</a>' % (i, name, i + 1)
+                comments.append(msg)
+          %>
+          ${', '.join(comments)}
+        % endif
+      </td>
     </tr>
   % endfor
 </table>
@@ -20,19 +35,6 @@
     ${render_diff(diff_idx, diff)}
   </div>
 % endfor
-
-##<div id="comment0" class="hidden">
-##  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-##  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-##  enim ad minim veniam, quis nostrud exercitation ullamco laboris
-##  nisi ut <a href="">linky linky</a> aliquip ex ea commodo
-##  <br/><br/>
-##  consequat. Duis aute irure dolor in reprehenderit in voluptate
-##  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-##  occaecat cupidatat non proident, sunt in culpa qui officia
-##  deserunt mollit anim id est laborum
-##</div>
-##<span id="comment0-icon" class="comment-icon hidden"><label>1</label></span>
 
 <%def name="diff_stat(d)">
   <%
@@ -123,21 +125,31 @@
 
   ## Render the data required for comments
   <input id="r" type="hidden" value="${model.id}" />
+
+  ## Render the comments themselves
   % for diff_idx, diff in enumerate(model['diffs']):
-    % for comment in diff.get('comments', ()):
+    % for i, comment in enumerate(diff.get('comments', ())):
       <%
-        hash = 'msg%s%s' % (diff_idx, ''.join(comment['line_numbers']))
         first_line = comment['line_numbers'][0]
+        hash = 'msg%s%s' % (diff_idx, ''.join(comment['line_numbers']))
+        path = diff['after']['name'][:diff['after']['name'].find(':')]
+        when = datetime.fromtimestamp(comment['timestamp'])
       %>
 
-      <pre id="${hash}">${comment['msg']}</pre>
-      <span id="${hash}-icon" class="comment-icon hidden">
-        <label>1</label>
-      </span>
+      <div class="comment">
+        <a name="comment${i}${path}"></a>
+        <label>
+          Comment - ${when.strftime('%c')} - ${diff['after']['label']}
+        </label>
+        <pre id="${hash}">${comment['msg']}</pre>
+        <span id="${hash}-icon" class="comment-icon hidden">
+          <label>1</label>
+        </span>
+      </div>
 
       <script>
         applyLineCommentMakers(
-          $('#diff0 .after pre').get(${first_line}),
+          $('#diff${diff_idx} .after pre').get(${first_line}),
           '${hash}'
         );
       </script>

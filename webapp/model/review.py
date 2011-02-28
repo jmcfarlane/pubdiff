@@ -46,6 +46,7 @@ class Comment(dict):
     def __init__(self):
         self['lines'] = []
         self['msg'] = None
+        self['timestamp'] = time.time()
 
 class Diff(dict):
     def __init__(self):
