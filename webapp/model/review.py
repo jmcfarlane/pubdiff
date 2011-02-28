@@ -44,7 +44,7 @@ LANGUAGE_MAP = {
 
 class Comment(dict):
     def __init__(self):
-        self['lines'] = []
+        self['line_numbers'] = []
         self['msg'] = None
         self['timestamp'] = time.time()
 
@@ -53,7 +53,10 @@ class Diff(dict):
         self['after'] = {'name':None}
         self['before'] = {'name':None}
         self['comments'] = []
-        self['line_numbers'] = []
+        self['diff_stat_added'] = 0
+        self['diff_stat_removed'] = 0
+        self['diff_stat_total'] = 0
+        self['lines'] = []
 
 class Review(couch.Document):
     DB = 'pubdiff/reviews'
