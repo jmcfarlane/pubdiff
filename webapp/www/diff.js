@@ -60,42 +60,46 @@ function enableCodeComments(selector, diffIndex) {
       $('#' + hash).dialog({
         height:300,
         width:600,
+        buttons: {
+          'Cancel':function() {
+            $(this).dialog('close');
+          },
+          'Save comment':function() {
+            url = '/api/comment/persist'
+            args = {
+              'diff_index':diffIndex,
+              'line_numbers':line_numbers.join(','),
+              'msg':this.value,
+              'r':$('#r').val()
+            };
 
-        beforeClose: function(event, ui) {
-          url = '/api/comment/persist'
-          args = {
-            'diff_index':diffIndex,
-            'line_numbers':line_numbers.join(','),
-            'msg':this.value,
-            'r':$('#r').val()
-          };
+            $.post(url, args, function(data, status, xhr) {
+                console.log(data);
+                console.log(status);
 
-          $.post(url, args, function(data, status, xhr) {
-              console.log(data);
-              console.log(status);
-            }
-          )
+                // Leave a marker (span) to pull up the msg later
+                var span = document.createElement('span');
+                span.setAttribute('id', hash + '-icon');
+                span.setAttribute('class', 'comment-icon hidden');
 
-          console.log(args);
+                // Add a label with the comment count to the span
+                var label = document.createElement('label');
+                label.innerHTML = '1';
+                span.appendChild(label);
 
+                // Add the message to the dom
+                $('body').append(span);
+
+                // Try to flag the line and add a notification callout
+                applyLineCommentMakers(lines[0], hash);
+            })
+
+            // Close the dialog after
+            $(this).dialog('close');
+
+          }
         }
       }).width('100%');
-
-      // Leave a marker (span) to pull up the message just added
-      var span = document.createElement('span');
-      span.setAttribute('id', hash + '-icon');
-      span.setAttribute('class', 'comment-icon hidden');
-
-      // Add a label with the comment count to the span
-      var label = document.createElement('label');
-      label.innerHTML = '1';
-      span.appendChild(label);
-
-      // Add the message to the dom
-      $('body').append(span);
-
-      // Try to flag the line and add a notification callout
-      applyLineCommentMakers(lines[0], hash);
 
       // Reset the css so it's not selected looking
       $.each(lines, function(index, value) {
