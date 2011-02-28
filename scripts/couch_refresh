@@ -45,10 +45,10 @@ function persist {
         rev=$(fetch_rev "$mydb" "$doc")
         if [ "$rev" == "" ]; then
             echo -n "Creating new doc ($doc): "
-            cat $code | grep -v -e '^//' -e '.*__REV__' > $tokenized
+            cat $code | grep -v -e '//' -e '.*__REV__' > $tokenized
         else
             echo -n "Updating existing doc ($doc): "
-            cat $code | grep -v '^//' | sed -e "s|__REV__|$rev|g" > $tokenized
+            cat $code | grep -v '//' | sed -e "s|__REV__|$rev|g" > $tokenized
         fi
 
         # Persist or update the doc

@@ -4,7 +4,8 @@
 % for review in model.recent:
   <li>
     <a href="/r/${review.id}">Created: ${review['created']}</a>
-    (Files modified: ${review['files_changed']})
+    | Files modified: ${review['files_changed']}
+    | Comments: ${review['comments']}
   </li>
 % endfor
 </ol>

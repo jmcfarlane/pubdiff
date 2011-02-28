@@ -8,9 +8,17 @@
     "recent" : {
       "map" :
         "function (doc) {
+
+          // Calculate total comment count
+          var comments = 0;
+          for (d=0; d<doc.diffs.length; d++) {
+            comments += doc.diffs[d].comments.length;
+          }
+
           emit(
             [doc.created, doc._id],
             {
+              'comments': comments,
               'created': doc.created,
               'files_changed': doc.diffs.length
             }
