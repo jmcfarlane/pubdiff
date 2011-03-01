@@ -19,12 +19,16 @@ app.local.root = os.path.join(os.getcwd(), 'webapp')
 
 # App url routes
 app.mapper = (
-    # Home controller
+    # Common
     (r'^$', 'home.index'),
     (review.RE_REVIEW.pattern, 'home.review'),
     (r'^/recent/?$', 'home.recent_reviews'),
 
-    # API controllers
+    # API
     (r'^/api/upload/?$', 'home.upload'),
     (r'^/api/comment/persist/?$', 'home.comment'),
+
+    # About
+    (r'^/about/?$', 'about.index'),
+    (r'^/r/your-unique-review/?$', 'about.smarty_pants'),
 )

@@ -7,18 +7,33 @@ body {
   font-size: 130%;
 }
 
+/* Logo */
 h1.logo, h1.logo a, h1.logo a:visited {
   color: orange;
 }
 
-h1, h2 {
+/* Toolbar */
+ul.toolbar {
+  color: #4a4a4a;
+  list-style-type: none;
+  margin: 4px;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+ul.toolbar a, ul.toolbar a:visited {
   color: #4a4a4a;
 }
 
-h3 {
-  color: #eee;
+ul.toolbar li {
+  display: inline;
+  margin: 0;
+  padding: 0 0;
 }
 
+/* Links */
 a:focus, a:hover {
   color: #09f;
 }
@@ -33,23 +48,28 @@ ol.howto {
   font-size: 120%;
 }
 
-ol.howto label{
+ol.howto label {
   color: green;
   font-size: 110%;
   font-weight: bold;
 }
 
-ol.howto div{
+ol.howto div {
   margin-top: 10px;
 }
 
-ol.howto code{
+ol.howto code {
   border: 1px solid #4a4a4a;
   display: block;
   margin-bottom: 20px;
   margin-top: 8px;
   padding: 1px 4px;
   width: 600px;
+}
+
+ol.howto code div.out {
+  color: #dddddd;
+  font-style: italic;
 }
 
 /* Diff view */
@@ -200,18 +220,58 @@ div.comment pre {
   font-size: 60%;
 }
 
-/*
-div.ui-dialog textarea {
-  font-size: 60%;
-  margin: auto;
-  width: auto;
-} */
-
 textarea.ui-dialog-content.ui-widget-content {
   font-size: 55%;
+}
+
+/* Generic classes */
+img.wrap-center {
+  display: block;
+  margin: auto;
+
+  -moz-box-shadow: 4px 4px 4px #dddddd;
+  -webkit-box-shadow: 0px 10px 16px #4a4a4a;
+  box-shadow: 4px 4px 4px #dddddd;
+}
+
+/* Notificaiton classes */
+div.error, div.warning {
+  margin: 4px;
+  padding: 4px;
+}
+
+div.error label, div.warning label {
+  color: white;
+  display: block;
+  font-weight: bold;
+  margin: 4px -4px;
+  padding: 4px;
+}
+
+div.error label {
+  background-color: red;
+}
+
+div.warning label {
+  background-color: orange;
+  color: black;
+}
+
+div.homepage.warning {
+  width: 400px;
+  float: right;
+  margin-right: 5%;
 }
 
 /* Classes not to be overridden */
 .hidden {
   display: none;
+}
+
+.wrap-left {
+  float: left;
+}
+
+.wrap-right {
+  float: right;
 }

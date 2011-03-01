@@ -1,5 +1,12 @@
 <%inherit file="/base.tmpl"/>
 
+<div class="homepage warning">
+  <label>Warning</label>
+  Pubdiff has just started development (about 1 month of
+  <i>evening</i> work so far). It's likely to throw errors, generate
+  diffs that make no sense, or other random crazy things.
+</div>
+
 <ol class="howto">
   <li>
     <label>Installation</label>
@@ -18,6 +25,7 @@
       <code>
         git add files you changed<br/>
         git diff --cached | pubdiff
+        <div class="out">http://www.pubdiff.com/r/your-unique-review</div>
       </code>
     </div>
   </li>
