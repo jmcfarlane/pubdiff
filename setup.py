@@ -3,6 +3,14 @@ from distutils.core import setup
 import os
 import sys
 
+class MissingDependencyError(Exception):
+    pass
+
+# Check for dependencies
+if 'install' in sys.argv:
+    if sys.version_info < (2, 6):
+        raise MissingDependencyError('Python-2.6 or higher')
+
 # Project imports
 from pubdiff import client
 
