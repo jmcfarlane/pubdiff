@@ -7,7 +7,7 @@ from chula.www import controller
 
 class Controller(controller.Controller):
     def render(self, view):
-        src = os.path.join(self.config.local.root, 'view')
+        src = os.path.join(self.config.htdocs, '..', 'view')
         lookup = TemplateLookup(directories=[src])
         view = Template(filename=src + view,
                         lookup=lookup,

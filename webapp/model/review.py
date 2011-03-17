@@ -71,9 +71,12 @@ class Review(couch.Document):
 
 # todo: Move this class to chula:
 class ReadonlyGenericDocument(dict):
-    def __init__(self, id, contents):
+    def __init__(self, id, document=None):
+        if document is None:
+            document = {}
+
         self.id = id
-        self.update(contents)
+        self.update(document)
 
 class Reviews(couch.Documents):
     DB = Review.DB
