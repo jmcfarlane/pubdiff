@@ -83,8 +83,10 @@ class Reviews(couch.Documents):
 
     def recent(self, **kwargs):
         view = 'reviews/recent'
-        reviews = self.view(view, ReadonlyGenericDocument, **kwargs)
-        reviews.sort(reverse=False)
+        reviews = self.view(view,
+                            ReadonlyGenericDocument,
+                            descending=True,
+                            **kwargs)
 
         return reviews
 
