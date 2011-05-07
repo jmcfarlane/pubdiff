@@ -16,6 +16,7 @@ sys.path.insert(0, os.getcwd())
 from model import diff
 
 DATE_FORMAT = '%c'
+DEFAULT_ENCODING = 'utf-8'
 RE_REVIEW = re.compile(r'^/r/([a-z0-9]+)$')
 RE_BASENAME = re.compile(r':(before|after)')
 LANGUAGE_MAP = {
@@ -121,7 +122,7 @@ class UploadedReview(list):
 
                     paths.append(fq_path)
                     with open(fq_path, 'w') as fh:
-                        fh.write(source['contents'])
+                        fh.write(source['contents'].encode(DEFAULT_ENCODING))
 
                 # Append the (now on disk) paths to be uploaded
                 self.append(paths)
