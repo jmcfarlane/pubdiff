@@ -9,15 +9,23 @@ import sys
 import urllib2
 import webbrowser
 
-config = ConfigParser.ConfigParser({'url':'http://www.pubdiff.com'})
-config.read(os.path.expanduser('~/.pubdiffrc'))
-
 AFTER = 'after'
 BEFORE = 'before'
+CONFIG_DEFAULTS = {'url':'http://www.pubdiff.com'}
+CONFIG_FILE = '~/.pubdiffrc'
+CONFIG_SECTION = 'core'
 CONTENTS = 'contents'
+ENDPOINT_PATH = '/api/upload'
 NAME = 'name'
-URL = config.get('core', 'url') + '/api/upload'
 VERSION = '0.0.8.dev'
+
+config = ConfigParser.ConfigParser(CONFIG_DEFAULTS)
+config.read(os.path.expanduser(CONFIG_FILE))
+if not config.has_section(CONFIG_SECTION):
+    config.add_section(CONFIG_SECTION)
+
+# Fetch the endpoint to post to
+URL = config.get(CONFIG_SECTION, 'url') + ENDPOINT_PATH
 
 class SourceFile(dict):
     def __init__(self, name=None, contents=None):
