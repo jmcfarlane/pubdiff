@@ -31,7 +31,6 @@ You'll then get a url you can use and share :)
 Problems
 ++++++++
 
-Pubdiff is **very** young, in fact it's only had about 10 days of
-development so far.  You'll probably find lots of situations where the
-tool either breaks, or renders diffs that look like garbage.  Give it
-time :)
+Pubdiff is **very** young, you'll probably find lots of situations
+where the tool either breaks, or renders diffs that look like garbage.
+Give it time :)
