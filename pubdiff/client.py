@@ -17,7 +17,7 @@ CONFIG_SECTION = 'core'
 CONTENTS = 'contents'
 ENDPOINT_PATH = '/api/upload'
 NAME = 'name'
-VERSION = '0.0.8'
+VERSION = '0.0.9.dev'
 
 config = ConfigParser.ConfigParser(CONFIG_DEFAULTS)
 config.read(os.path.expanduser(CONFIG_FILE))
